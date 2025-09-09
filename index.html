@@ -402,7 +402,9 @@ body.loaded .pronounce-btn {
 .settings-card {
   position: relative;
   inline-size: min(340px, 92vw);
-  min-block-size: 400px;
+  min-block-size: 560px; /* taller on mobile too */
+  max-block-size: min(92vh, 680px);
+  overflow: auto;
   background: var(--surface-1);
   border-radius: 20px;
   border: 1px solid color-mix(in oklab, var(--accent-color) 14%, transparent);
@@ -658,7 +660,7 @@ html[data-theme="dark"] .enter-btn {
 
 /* Compact spacing for short viewports */
 @media (max-height: 740px) {
-  .settings-card { padding: .65rem; padding-bottom: 2.8rem; min-block-size: 360px; }
+  .settings-card { padding: .65rem; padding-bottom: 2.8rem; min-block-size: 480px; }
   .settings-hero { margin: .15rem .15rem .25rem; gap: .6rem; }
   .language-overlay .lang-logo { width: 56px; }
   .settings-section { margin: .3rem 0; }
@@ -690,7 +692,11 @@ html[data-theme="dark"] .enter-btn {
 /* Faster transform response for magnetized enter button */
 .enter-btn.magnet { transition: transform .05s ease, box-shadow .25s ease, background .25s ease; }
     /* Allow JS-controlled fade on experience timeline dots */
-.xp-item::before { opacity: var(--dot-opacity, 0.2); transition: opacity 0s; }
+.xp-item::before {
+      opacity: 1 !important;
+      background-color: var(--accent-color);
+      transition: opacity 0s;
+    }
 /* Small percentage chip above each skill bar (injected by JS) */
 .bar .bar-label { position: absolute; right: 8px; top: -22px; font-weight: 800; font-size: .8rem; opacity: .9; }
 
@@ -721,16 +727,21 @@ html[data-theme="dark"] .enter-btn {
     .btn:active { transform: translateY(1px) scale(.99); }
 
     html, body { transition: background 0.5s ease; }
+    /* Prevent horizontal scroll on mobile */
+    
     /* Skip link */
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;z-index:1000;background:var(--accent-color);color:#fff;padding:.5rem .75rem;border-radius:.375rem;outline:none}
     body {
       margin: 0;
-      overflow-x: hidden;
+      overflow-x: clip;
       overflow-y: auto;
       background: var(--bg, #000);
       color: var(--text-color, #eee);
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    @supports not (overflow: clip) {
+      body { overflow-x: hidden; }
     }
 
     /* ——— Theme vars ——— */
@@ -763,6 +774,8 @@ html[data-theme="dark"] .enter-btn {
       --backtotop-color: #fff;
       --focus-ring: 0 0 0 3px color-mix(in oklab, var(--accent-color) 30%, transparent);
       /* Enter button defaults (overridden per theme) */
+      /* Mobile menu background */
+      --menu-bg: var(--surface-1);
       
     }
     [data-theme="dark"] {
@@ -778,6 +791,7 @@ html[data-theme="dark"] .enter-btn {
       --timeline-line: #9d8574;
       --footer-bg: #23211e;
       --footer-color: #f5e7c8;
+      --menu-bg: var(--surface-1);
       
     }
     html[data-theme="light"] {
@@ -797,6 +811,7 @@ html[data-theme="dark"] .enter-btn {
       --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-2) 100%);
       --gradient-accent-soft: linear-gradient(135deg, color-mix(in oklab, var(--accent-color) 18%, transparent) 0%, color-mix(in oklab, var(--accent-2) 18%, transparent) 100%);
       --accent-warm: #ece7d5;
+      --menu-bg: var(--surface-1);
       
     }
     html[data-theme="light"] body { background: #ece7d5 !important; }
@@ -934,6 +949,8 @@ html[data-theme="dark"] .enter-btn {
       letter-spacing: .2px;
     }
     .hello .blurb { max-width: 680px; color: var(--footer-color); padding-top: 0.25rem; font-size: 1.25rem;}
+    /* Desktop/mobile blurb split */
+    .blurb--mobile { display: none; }
     .hello .cta-row {
       display:flex; gap: .75rem; align-items:center; margin-top: 1rem; flex-wrap:wrap;
     }
@@ -1187,7 +1204,7 @@ html[data-theme="dark"] .enter-btn {
     /* Extra spacing below the featured section */
     #featured {
       margin-bottom: 10rem; /* adjust value as needed */
-      scroll-margin-top: 100px;
+      scroll-margin-top: 75px;
     }
     #projects {
       margin-bottom: 10rem; /* adjust value as needed */
@@ -1226,6 +1243,9 @@ html[data-theme="dark"] .enter-btn {
       transform: translateY(18px) scale(.96);
       animation: pillFlip3D .9s cubic-bezier(.25,.85,.25,1) forwards;
     }
+
+   
+
     .pill:nth-of-type(1) { animation-delay: 0.7s; }
     .pill:nth-of-type(2) { animation-delay: 1s; }
     .pill:nth-of-type(3) { animation-delay: 1.3s; }
@@ -1879,6 +1899,37 @@ html[data-theme="dark"] .enter-btn {
 
     /* Featured carousel-like grid */
 .cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; }
+/* Mobile: add extra spacing between Featured cards */
+@media (max-width: 900px) {
+  #featured .cards { gap: 4rem; }
+}
+
+/* Mobile: add extra spacing between Project cards */
+@media (max-width: 900px) {
+  #projects .projects-grid {
+    row-gap: 3rem;     /* vertical spacing */
+    column-gap: 1.5rem; /* keep horizontal spacing tighter if you want */
+  }
+}
+
+/* Mobile: add extra spacing between Writing cards */
+@media (max-width: 900px) {
+  #writing .talks-grid {
+    row-gap: 3rem;     /* vertical spacing */
+    column-gap: 1.5rem; /* horizontal spacing */
+  }
+}
+
+/* Mobile: add extra spacing between Talks cards */
+@media (max-width: 900px) {
+  #talks .talks-grid {
+    row-gap: 3rem;     
+    column-gap: 1.5rem; 
+  }
+}
+
+/* NOTE: Featured cards use animated gradient borders which can stutter on mobile.
+   See the mobile-only override below that disables ::before + heavy shadows for phones. */
 /* --- Enhanced Pokémon-style foil/glow for .card --- */
 /* Default .card style */
 /* --- Card base style --- */
@@ -1933,6 +1984,10 @@ html[data-theme="light"] .card {
     box-shadow: 0 0 8px var(--accent-color), 0 0 14px var(--accent-2); /* lighter shadows */
     z-index: 1;
   }
+
+@media (prefers-reduced-motion: reduce) {
+  .card::before { animation: none !important; }
+}
 
   html[data-theme="light"] .card::before {
     background: linear-gradient(120deg,
@@ -2024,6 +2079,225 @@ html[data-theme="light"] .card .thumb {
 @keyframes shimmer{to{transform:translateX(120%);} }
     .meta { display:flex; gap:.5rem; flex-wrap:wrap; }
 
+/* Mobile: stabilize Projects 3D flip rendering and lighten shadows */
+@media (max-width: 900px) {
+  #projects .project-card {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 12px rgba(0,0,0,.16);
+  }
+}
+
+/* ===== Mobile-only fixes for jittery Featured cards ===== */
+@media (max-width: 900px) {
+  /* Disable heavy animated gradient border + huge glows on mobile */
+  #featured .card::before { content: none !important; animation: none !important; }
+
+  /* Tone down shadows and avoid repaint storms */
+  #featured .card {
+    box-shadow: 0 4px 12px rgba(0,0,0,.16) !important;
+    border: 1px solid rgba(255,255,255,.10) !important;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+    contain: paint layout;
+  }
+
+  /* Hover effects shouldn’t run on touch devices; guard them */
+  @media (hover: none) {
+  /* Neutralize hover-only behaviors on touch, keep transitions alive */
+  #featured .card:hover { 
+    transform: none !important; 
+    box-shadow: 0 4px 12px rgba(0,0,0,.16) !important; 
+  }
+  #featured .card:hover .thumb img { transform: none !important; }
+}
+}
+
+/* ===== Mobile: unique, performant scroll animations for Featured cards (with boot flag) ===== */
+@media (max-width: 900px) {
+  /* Hidden base only after JS sets .sr-ready to ensure transitions apply */
+  body.sr-ready #featured .card{
+    opacity: 0;
+    transform: translateY(22px) scale(.98) rotateZ(0.2deg);
+    transition: opacity .6s ease, transform .6s ease, box-shadow .3s ease;
+  }
+  body.sr-ready #featured .card.is-inview{
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateZ(0);
+  }
+
+  /* Alternates for variety */
+  body.sr-ready #featured .card.anim-lift.is-inview { transform: translateY(0) scale(1); }
+
+  body.sr-ready #featured .card.anim-slide-left  { transform: translateX(14px) translateY(22px) scale(.98); }
+  body.sr-ready #featured .card.anim-slide-right { transform: translateX(-14px) translateY(22px) scale(.98); }
+  body.sr-ready #featured .card.anim-slide-left.is-inview  { transform: translateX(0) translateY(0) scale(1); }
+  body.sr-ready #featured .card.anim-slide-right.is-inview { transform: translateX(0) translateY(0) scale(1); }
+
+  body.sr-ready #featured .card.anim-tilt { transform: translateY(22px) scale(.98) rotateZ(-1.2deg); }
+  body.sr-ready #featured .card.anim-tilt.is-inview { transform: translateY(0) scale(1) rotateZ(0); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #featured .card { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+@media (max-width: 900px) {
+  body.sr-ready #featured .card,
+  body.sr-ready #featured .card.is-inview {
+    transition: opacity .6s ease, transform .6s ease, box-shadow .3s ease !important;
+  }
+}
+/* Scope hover-driven animations to real hover devices only (prevents sticky-hover on mobile) */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { transform: translateY(-8px) scale(1.02); }
+  .card:hover .thumb img { transform: scale(1.08); }
+}
+
+/* ===== Mobile: Skills section scroll animations (replayable) ===== */
+@media (max-width: 900px) {
+  /* Skill tiles: smooth translate + scale only */
+  body.sr-ready #skills .skill,
+  body.sr-ready #skills .skill-card {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(.985);
+    transition: opacity .55s ease, transform .55s ease;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  body.sr-ready #skills .skill.is-inview,
+  body.sr-ready #skills .skill-card.is-inview {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  /* Bars: fill grows using scaleX (perf-safe) */
+  body.sr-ready #skills .bar .fill,
+  body.sr-ready #skills .bar .meter,
+  body.sr-ready #skills .bar .progress,
+  body.sr-ready #skills .bar .progress-fill,
+  body.sr-ready #skills .bar .bar-fill {
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform .7s cubic-bezier(.2,.8,.2,1);
+    will-change: transform;
+  }
+  body.sr-ready #skills .skill.is-inview .bar .fill,
+  body.sr-ready #skills .skill.is-inview .bar .meter,
+  body.sr-ready #skills .skill.is-inview .bar .progress,
+  body.sr-ready #skills .skill.is-inview .bar .progress-fill,
+  body.sr-ready #skills .skill.is-inview .bar .bar-fill,
+  body.sr-ready #skills .skill-card.is-inview .bar .fill,
+  body.sr-ready #skills .skill-card.is-inview .bar .meter,
+  body.sr-ready #skills .skill-card.is-inview .bar .progress,
+  body.sr-ready #skills .skill-card.is-inview .bar .progress-fill,
+  body.sr-ready #skills .skill-card.is-inview .bar .bar-fill,
+  body.sr-ready #skills .bar.is-inview .fill,
+  body.sr-ready #skills .bar.is-inview .meter,
+  body.sr-ready #skills .bar.is-inview .progress,
+  body.sr-ready #skills .bar.is-inview .progress-fill,
+  body.sr-ready #skills .bar.is-inview .bar-fill {
+    transform: scaleX(1);
+  }
+
+  /* Soft halo on the bar while visible */
+  body.sr-ready #skills .skill.is-inview .bar,
+  body.sr-ready #skills .skill-card.is-inview .bar,
+  body.sr-ready #skills .bar.is-inview {
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent-2) 28%, transparent),
+                0 6px 16px rgba(0,0,0,.14);
+    transition: box-shadow .45s ease;
+  }
+
+  /* Keep transitions alive on scroll up/down */
+  body.sr-ready #skills .skill,
+  body.sr-ready #skills .skill.is-inview,
+  body.sr-ready #skills .skill-card,
+  body.sr-ready #skills .skill-card.is-inview,
+  body.sr-ready #skills .bar,
+  body.sr-ready #skills .bar.is-inview {
+    transition: opacity .55s ease, transform .55s ease !important;
+  }
+}
+
+/* Mobile portrait: rotate and resize visitor map for best fit */
+@media (max-width: 900px) and (orientation: portrait) {
+  #visitorMapPlaceholder iframe,
+  .visitor-map-frame iframe {
+    display: block !important;
+    position: relative !important;
+    transform: translateX(-25%) rotate(90deg) !important;
+    transform-origin: top left !important;
+    width: 100vh !important;   /* rotate makes height behave as width */
+    height: 100vw !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #skills .skill, #skills .skill-card, #skills .bar {
+    opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important;
+  }
+  #skills .bar .fill, #skills .bar .meter, #skills .bar .progress, #skills .bar .progress-fill, #skills .bar .bar-fill {
+    transform: none !important; transition: none !important;
+  }
+}
+
+/* ===== Mobile: Experience section scroll animations (replayable) ===== */
+@media (max-width: 900px) {
+  /* Panels rise with a tiny skew/tilt for a unique feel */
+  body.sr-ready #experience .xp-panel {
+    opacity: 0;
+    transform: translateY(26px) rotateZ(-0.4deg) skewY(1deg) scale(.985);
+    transition: opacity .55s ease, transform .55s ease;
+    will-change: transform, opacity;
+  }
+  body.sr-ready #experience .xp-panel.is-inview {
+    opacity: 1;
+    transform: translateY(0) rotateZ(0) skewY(0) scale(1);
+  }
+
+  /* Each timeline item slides subtly from the line; dots “breathe” when in view */
+  body.sr-ready #experience .xp-item {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity .5s ease, transform .5s ease;
+    will-change: transform, opacity;
+  }
+  body.sr-ready #experience .xp-item.is-inview {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  /* Pulse the dot when item is visible */
+  body.sr-ready #experience .xp-item::before {
+    transition: transform .5s ease, box-shadow .5s ease, background .5s ease;
+  }
+  body.sr-ready #experience .xp-item.is-inview::before {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent-color) 35%, transparent);
+    background: var(--accent-color);
+  }
+
+  /* Ensure transitions stay active on mobile for these elements */
+  body.sr-ready #experience .xp-panel,
+  body.sr-ready #experience .xp-panel.is-inview,
+  body.sr-ready #experience .xp-item,
+  body.sr-ready #experience .xp-item.is-inview {
+    transition: opacity .55s ease, transform .55s ease !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #experience .xp-panel, #experience .xp-item {
+    opacity: 1 !important; transform: none !important; transition: none !important;
+  }
+}
     /* Experience & Education (two-column cards with vertical timeline) */
     .xp-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; align-items:stretch; grid-auto-rows: 1fr; }
     .xp-panel {
@@ -2071,6 +2345,7 @@ html[data-theme="light"] .card .thumb {
     .xp-desc { color: var(--text-color); opacity:.92; margin:.25rem 0 0; line-height:1.6; padding-left:1.2rem; }
     .xp-desc strong.kw { font-weight: 800; }
     .xp-desc li { margin-bottom:.35rem; }
+    
     @media (max-width: 900px){ .xp-grid { grid-template-columns: 1fr; } }
 
     /* Skills grid */
@@ -2098,7 +2373,8 @@ html[data-theme="light"] .card .thumb {
       animation: fillBar 1.5s ease-out forwards;
     }
     .skill.no-bar .bar { display: none; }
-
+    
+    
     /* Contact form */
     .contact-form { 
       display: grid; 
@@ -2233,6 +2509,22 @@ html[data-theme="light"] .card .thumb {
       display: block;
       overflow: hidden;
     }
+.card-desc--mobile { display: none; }
+
+@media (max-width: 900px) {
+  .card-desc--desktop { display: none; }
+  .card-desc--mobile { display: block; }
+}
+        /* Zoom out the visitor map slightly on mobile screens */
+    @media (max-width: 900px) {
+      #visitorMapPlaceholder {
+        transform: scale(0.68);
+        transform-origin: center center;
+        left: -5.25rem;
+        top: -2.5rem;
+      }
+    }
+
 
     /* Visitor map placeholder for fade transitions */
     #visitorMapPlaceholder {
@@ -2241,8 +2533,6 @@ html[data-theme="light"] .card .thumb {
       width: 100%;
       height: 100%;
       position: absolute; /* sit inside frame without changing layout */
-      top: 0;
-      left: 0;
     }
 
     /* Footer links */
@@ -2294,16 +2584,22 @@ html[data-theme="light"] .card .thumb {
       .nav-links { display:none !important; }
       .nav-cta { display:none; }
 
-      /* Mobile dropdown panel */
+      /* Mobile dropdown panel with smooth open/close */
       .mobile-menu { 
-        display:none; position:absolute; left:0; right:0; top:56px; 
-        background: var(--surface-2); border-bottom:1px solid rgba(255,255,255,.06); 
+        display:flex; flex-direction:column; gap:.5rem;
+        position:absolute; left:0; right:0; top:56px; 
+        background: var(--menu-bg);
+        border-bottom:1px solid rgba(0,0,0,.08); 
+        box-shadow: 0 10px 24px rgba(0,0,0,.18);
         padding: .75rem 1rem; z-index: 60;
+        opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none;
+        transition: opacity .25s ease, transform .25s ease, background-color .25s ease;
       }
-      body.nav-open .mobile-menu { display:flex; flex-direction:column; gap:.5rem; }
+      body.nav-open .mobile-menu { opacity:1; transform: translateY(0); visibility: visible; pointer-events: auto; }
       .nav-links-mobile { display:flex; flex-direction:column; gap:.25rem; }
       .nav-links-mobile a { text-decoration:none; color:var(--text-color); font-weight:600; font-size:1rem; padding:.5rem .25rem; border-radius:.4rem; }
-      .nav-links-mobile a:hover { background: var(--gradient-accent-soft); }
+      .nav-links-mobile a:hover,
+      .nav-links-mobile a[aria-current="true"] { background: var(--gradient-accent-soft); }
       .menu-divider { height:1px; background: rgba(255,255,255,.08); margin:.5rem 0; }
       .menu-actions { display:flex; align-items:center; gap:.5rem; flex-wrap: wrap; }
       .menu-actions .theme-toggle { inline-size: 40px; block-size: 40px; }
@@ -2420,6 +2716,14 @@ html[data-theme="light"] .card .thumb {
   /* Responsive overrides and small-screen polish */
   /* Media-agnostic fluid media */
   img, video { max-width: 100%; height: auto; }
+  /* Hide mobile icon ring by default (desktop) */
+  .icon-ring-mobile { display: none; }
+
+  /* Reduce double-tap zoom triggers on touch devices while allowing pinch-zoom */
+  @media (hover: none) and (pointer: coarse) {
+    html, body { touch-action: manipulation; }
+    a, button, .btn, .cta, .menu-toggle, .lang-trigger, .pronounce-btn, .enter-btn { touch-action: manipulation; }
+  }
 
   /* Make hero column spacing and avatar scale fluid */
   .hello { grid-template-columns: minmax(280px, 340px) 1fr; gap: clamp(1rem, 3vw, 3rem); padding-top: clamp(4rem, 10vh, 10rem); }
@@ -2435,8 +2739,30 @@ html[data-theme="light"] .card .thumb {
     .hello-meta { margin: -14rem auto 4rem; }
   }
   @media (max-width: 900px) {
-    .hello { grid-template-columns: 1fr; padding-top: 6rem; text-align: center; }
-    .hello .avatar { margin-inline: auto; }
+    .hello { grid-template-columns: 1fr; padding-top: 1.5rem; text-align: center; }
+    .avatar-wrap { position: relative; display: inline-block; }
+    .blurb--desktop { display: none; }
+    .blurb--mobile { display: block; }
+    .hello .avatar { margin-inline: auto; width: clamp(200px, 46vw, 280px); }
+    /* Icon ring shown only on small screens, positioned around the avatar */
+    .icon-ring-mobile { position: absolute; inset: 0; pointer-events: none; display: block; }
+    .icon-ring-mobile .slot { position: absolute; left:50%; top:50%; }
+    .icon-ring-mobile img {
+      position: relative !important;
+      top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+      /* Keep their class-based animations (slide/shake/rotate) active */
+      width: clamp(30px, 11vw, 44px); height: clamp(30px, 11vw, 44px);
+    }
+    /* Place icons around the avatar using polar transform around center */
+    /* code: top-left; coffee: middle-left; cooking: middle-right; game: top-right; world: bottom-left; soccer: bottom-right */
+    .icon-ring-mobile .slot.code   { transform: translate(-50%,-50%) rotate(-135deg) translate(calc(50% + 30px)) rotate(135deg); }
+    .icon-ring-mobile .slot.coffee { transform: translate(-50%,-50%) rotate(180deg)   translate(calc(50% + 30px)) rotate(-180deg); }
+    .icon-ring-mobile .slot.cooking{ transform: translate(-50%,-50%) rotate(0deg)     translate(calc(50% + 30px)) rotate(0deg); }
+    .icon-ring-mobile .slot.game   { transform: translate(-50%,-50%) rotate(-45deg)   translate(calc(50% + 30px)) rotate(45deg); }
+    .icon-ring-mobile .slot.world  { transform: translate(-50%,-50%) rotate(135deg)   translate(calc(50% + 30px)) rotate(-135deg); }
+    .icon-ring-mobile .slot.soccer { transform: translate(-50%,-50%) rotate(60deg)    translate(calc(50% + 36px)) rotate(-60deg); }
+
+    /* Keep existing animations from desktop definitions */
     .hello-meta { margin: 2rem auto 2.5rem; padding: 1.25rem 1rem 2rem; gap: .75rem; grid-template-columns: 1fr; }
     .container_mouse { margin-top: 1rem; }
     .theme-toggle { inline-size: 44px; block-size: 44px; }
@@ -2445,18 +2771,58 @@ html[data-theme="light"] .card .thumb {
   @media (max-width: 480px) {
     .nav-inner { padding: .5rem .75rem; }
     .hello { padding: 0 .75rem; }
-    .cta { padding: .6rem .9rem; font-size: .95rem; }
+    .cta { padding: .5rem .8rem; font-size: .9rem; }
     .contact-card { padding: 1rem; gap: 1rem; }
     .visitor-map-frame { height: clamp(220px, 35vh, 300px); }
   }
 
+ 
+
+  /* Phone-specific tightening for About */
+  @media (max-width: 600px) {
+    .hello { gap: 1rem; padding-top: 1rem; }
+    .hello h1 { font-size: clamp(1.4rem, 5vw + .4rem, 2rem); }
+    .hello .pronounce-btn { width: 28px; height: 28px; }
+    .hello .pronounce-btn .icon svg { width: 14px; height: 14px; }
+    .hello .blurb { font-size: .95rem; line-height: 1.5; }
+    .pill { font-size: .9rem; }
+    .name-pinyin { font-size: .8rem; }
+    .hello .avatar { width: clamp(190px, 48vw, 240px); }
+    .icon-ring-mobile img { width: clamp(28px, 11vw, 38px); height: clamp(28px, 11vw, 38px); }
+    .icon-ring-mobile .slot.code   { transform: translate(-50%,-50%) rotate(-135deg) translate(calc(50% + 26px)) rotate(135deg); }
+    .icon-ring-mobile .slot.coffee { transform: translate(-50%,-50%) rotate(180deg)   translate(calc(50% + 26px)) rotate(-180deg); }
+    .icon-ring-mobile .slot.cooking{ transform: translate(-50%,-50%) rotate(0deg)     translate(calc(50% + 26px)) rotate(0deg); }
+    .icon-ring-mobile .slot.game   { transform: translate(-50%,-50%) rotate(-45deg)   translate(calc(50% + 26px)) rotate(45deg); }
+    .icon-ring-mobile .slot.world  { transform: translate(-50%,-50%) rotate(135deg)   translate(calc(50% + 26px)) rotate(-135deg); }
+    .icon-ring-mobile .slot.soccer { transform: translate(-50%,-50%) rotate(60deg)    translate(calc(50% + 32px)) rotate(-60deg); }
+  }
+
+/* Mobile (iPhone 14/15 Pro sizes and smaller): push hero higher, enlarge avatar */
+@media (max-width: 430px) {
+  /* Start the hero right at the navbar, respect safe-area notch */
+  .hello { padding-top: calc(env(safe-area-inset-top) + 0.02rem); }
+  .avatar-wrap { margin-top: calc(-5.0rem - env(safe-area-inset-top)); }
+  .hello .avatar { width: clamp(210px, 54vw, 280px); }
+  .icon-ring-mobile img { width: clamp(30px, 12vw, 44px); height: clamp(30px, 12vw, 44px); }
+  /* Slightly increase ring radius to match bigger avatar */
+  .icon-ring-mobile .slot.code   { transform: translate(-50%,-50%) rotate(-135deg) translate(calc(50% + 34px)) rotate(135deg); }
+  .icon-ring-mobile .slot.coffee { transform: translate(-50%,-50%) rotate(180deg)   translate(calc(50% + 34px)) rotate(-180deg); }
+  .icon-ring-mobile .slot.cooking{ transform: translate(-50%,-50%) rotate(0deg)     translate(calc(50% + 34px)) rotate(0deg); }
+  .icon-ring-mobile .slot.game   { transform: translate(-50%,-50%) rotate(-45deg)   translate(calc(50% + 34px)) rotate(45deg); }
+  .icon-ring-mobile .slot.world  { transform: translate(-50%,-50%) rotate(135deg)   translate(calc(50% + 34px)) rotate(-135deg); }
+  .icon-ring-mobile .slot.soccer { transform: translate(-50%,-50%) rotate(85deg)    translate(calc(50% + 46px)) rotate(-85deg); }
+}
+
+
   @media (max-height: 700px) {
     .hello { padding-top: 6rem; }
   }
-  /* Push about (hero) further down on larger screens */
+  /* Laptop/desktop: bring hero up slightly */
   @media (min-width: 901px) {
-    .hello { padding-top: clamp(8rem, 16vh, 14rem); }
-    .hello-meta { margin-top: -28rem; }
+    /* Reduced from clamp(8rem, 16vh, 14rem) for a tighter top offset */
+    .hello { padding-top: clamp(6rem, 12vh, 10rem); }
+    /* Push quick-contact lower on laptop/desktop */
+    .hello-meta { margin-top: -26rem; }
   }
   
   /* Tablet polish */
@@ -2493,38 +2859,63 @@ html[data-theme="light"] .card .thumb {
     if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
       gsap.registerPlugin(ScrollTrigger);
 
-      // Smooth flipping animation for featured cards
-      gsap.fromTo("#featured .card", 
-        { opacity: 0, rotateY: -90, transformPerspective: 1000, y: 40 },
-        { opacity: 1, rotateY: 0, y: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          stagger: 0.2,
-          scrollTrigger: {
-            trigger: "#featured",
-            start: "top 80%",
-            end: "top 30%",
-            scrub: true
+      // Smooth flipping animation for featured cards (desktop only)
+      const isMobile = window.matchMedia('(max-width: 900px)').matches;
+      if (!isMobile) {
+        gsap.fromTo('#featured .card',
+          { opacity: 0, rotateY: -90, transformPerspective: 1000, y: 40 },
+          {
+            opacity: 1, rotateY: 0, y: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+            stagger: 0.2,
+            scrollTrigger: {
+              trigger: '#featured',
+              start: 'top 80%',
+              end: 'top 30%',
+              scrub: true
+            }
           }
-        }
-      );
+        );
+      }
 
       // Smooth flip and rise animation for project cards (bidirectional)
-      gsap.fromTo("#projects .project-card", 
-        { opacity: 0, rotateY: -90, y: 80, transformPerspective: 1000 },
-        { opacity: 1, rotateY: 0, y: 0,
-          duration: 1.4,
-          ease: "power3.inOut",
-          stagger: { each: 0.25, ease: "power2.inOut" },
-          scrollTrigger: {
-            trigger: "#projects",
-            start: "top 85%",
-            end: "bottom 85%",
-            scrub: true,
-            toggleActions: "play none none reverse"
+      // Mobile: per-card, lighter 3D and shorter range for smoother feel
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        document.querySelectorAll('#projects .project-card').forEach((card) => {
+          gsap.fromTo(card,
+            { opacity: 0, rotateY: -50 },
+            { opacity: 1, rotateY: 0,
+              duration: 0.8,
+              ease: 'sine.out',
+              force3D: true,
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 92%',
+                end: 'top 60%',
+                scrub: 0.6,
+                fastScrollEnd: true
+              }
+            }
+          );
+        });
+      } else {
+        gsap.fromTo("#projects .project-card", 
+          { opacity: 0, rotateY: -90, y: 80, transformPerspective: 1000 },
+          { opacity: 1, rotateY: 0, y: 0,
+            duration: 1.1,
+            ease: "power2.out",
+            stagger: { each: 0.22, ease: "power2.inOut" },
+            scrollTrigger: {
+              trigger: "#projects",
+              start: "top 85%",
+              end:   "bottom 85%",
+              scrub: true,
+              toggleActions: "play none none reverse"
+            }
           }
-        }
-      );
+        );
+      }
 
       // Unique animation for Writing & Talks cards
       gsap.fromTo("#writing .talk-card", 
@@ -3136,10 +3527,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <header class="hello fade-up" id="about">
     
-    <figure class="avatar" aria-label="Portrait">
-      <!-- Put your headshot at /images/portrait.jpg -->
-      <img src="/images/personal.png" alt="Portrait of Zijie Cai" loading="lazy" decoding="async" onerror="this.style.display='none';">
-    </figure>
+    <div class="avatar-wrap">
+      <figure class="avatar" aria-label="Portrait">
+        <!-- Put your headshot at /images/portrait.jpg -->
+        <img src="/images/personal.png" alt="Portrait of Zijie Cai" loading="lazy" decoding="async" onerror="this.style.display='none';">
+      </figure>
+      <!-- Mobile icon ring: 6 icons arranged around the avatar (3 per side) -->
+      <div class="icon-ring-mobile" aria-hidden="true">
+        <span class="slot code"><img class="code-icon" src="/icons/code.png" alt="" /></span>
+        <span class="slot coffee"><img class="coffee-icon" src="/icons/coffee.png" alt="" /></span>
+        <span class="slot cooking"><img class="cooking-icon" src="/icons/cooking.png" alt="" /></span>
+        <span class="slot game"><img class="game-icon" src="/icons/game.png" alt="" /></span>
+        <span class="slot world"><img class="world-icon" src="/icons/world.png" alt="" /></span>
+        <span class="slot soccer"><img class="soccer-icon" src="/icons/soccer.png" alt="" /></span>
+      </div>
+    </div>
     <div>
       <h1>
         <span class="intro-wave" data-i18n data-i18n-en="Hello, I’m" data-i18n-zh="你好，我是" data-i18n-ja="こんにちは、私は">Hello, I’m</span>
@@ -3159,18 +3561,33 @@ document.addEventListener("DOMContentLoaded", () => {
 </button>
         </span>
       </h1>
-      <p class="blurb" data-i18n data-i18n-html
+      <p class="blurb blurb--desktop" data-i18n data-i18n-html
          data-i18n-en='
   <strong class="about-me-label">A Bit About Me:</strong><br>
-  I’m a <span class="pill">AI Engineer</span> <span class="pill">Researcher</span>, <span class="pill">Creator</span>, and <span class="pill pill--ghost" aria-hidden="true"></span>&nbsp;passionate about<br><em>multimodal perception</em>, <em>agentic systems</em>, and <strong>shipping playful products</strong>.<br>
+  I’m an <span class="pill">AI Engineer</span> <span class="pill">Researcher</span>, <span class="pill">Creator</span>, <span class="pill pill--ghost" aria-hidden="true"></span>&nbsp;passionate about<br><em>multimodal perception</em>, <em>agentic systems</em>, and <strong>shipping playful products</strong>.<br>
   <span style="display:block; margin-top:.4rem;">I <u>transform research ideas into real-world tools</u> that people actually use.</span>'
          data-i18n-zh='
   <strong class="about-me-label">关于我：</strong><br>
-  我是一名 <span class="pill">AI 工程师</span> <span class="pill">研究者</span>、<span class="pill">创作者</span>、<span class="pill pill--ghost" aria-hidden="true"></span>&nbsp;热衷于<br><em>多模态感知</em>、<em>Agent 系统</em>，以及<strong>把有趣的想法做成真正的产品</strong>。<br>
-  <span style="display:block; margin-top:.4rem;">我致力于<u>把研究想法转化为真正可用的工具</u>，并让更多人用起来。</span>'
+  我是一名 <span class="pill">AI 工程师</span> <span class="pill">研究者</span>、<span class="pill">创作者</span>、<span class="pill pill--ghost" aria-hidden="true"></span>&nbsp;专注于<br><em>多模态感知</em>、<em>Agent 系统</em>，以及<strong>把有趣的想法做成真正的产品</strong>。<br>
+  <span style="display:block; margin-top:.4rem;">我致力于<u>把研究想法转化为实用的工具</u>，并让更多人用起来。</span>'
          data-i18n-ja='
   <strong class="about-me-label">私について少し：</strong><br>
   私は <span class="pill">AI エンジニア</span><span class="pill">研究者</span>・<span class="pill">クリエイター</span>・<span class="pill pill--ghost" aria-hidden="true"></span>&nbsp;<em>マルチモーダル知覚</em>、<em>エージェントシステム</em>、<strong>遊び心のある製品の作成</strong>に情熱を注いでいます。<br>
+  <span style="display:block; margin-top:.4rem;">研究のアイデアを<u>人々が実際に使う実用的なツール</u>へと形にします。</span>'>
+      </p>
+      <!-- Mobile-only blurb: same content initially; edit freely for mobile copy -->
+      <p class="blurb blurb--mobile" data-i18n data-i18n-html
+        data-i18n-en='
+  <strong class="about-me-label">A Bit About Me:</strong><br>
+  I’m an <span class="pill">AI Engineer</span>, <span class="pill">Researcher</span>, <span class="pill">Creator</span> who loves <em>multimodal perception</em>, <em>agentic systems</em>, and <strong>shipping playful products</strong>.<br>
+  <span style="display:block; margin-top:.4rem;">I <u>turn research ideas into real tools</u> that people actually use.</span>'
+   data-i18n-zh='
+  <strong class="about-me-label">关于我：</strong><br>
+  我是一名 <span class="pill">AI 工程师</span>、<span class="pill">研究者</span>、<span class="pill">创作者</span> 专注于<em>多模态感知</em>、<em>Agent 系统</em>，以及<strong>把有趣的想法做成真正的产品</strong>。<br>
+  <span style="display:block; margin-top:.4rem;">我致力于<u>把研究想法转化为实用的工具</u>，并让更多人用起来。</span>'
+         data-i18n-ja='
+  <strong class="about-me-label">私について少し：</strong><br>
+  私は <span class="pill">AI エンジニア</span>・<span class="pill">研究者</span>・<span class="pill">クリエイター</span> <em>マルチモーダル知覚</em>、<em>エージェントシステム</em>、<strong>遊び心のある製品の作成</strong>に情熱を注いでいます。<br>
   <span style="display:block; margin-top:.4rem;">研究のアイデアを<u>人々が実際に使う実用的なツール</u>へと形にします。</span>'>
       </p>
       <div class="cta-row">
@@ -3183,7 +3600,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <div class="hello-meta fade-up" aria-label="Quick contact">
     <div class="item"><strong data-i18n data-i18n-en="Phone" data-i18n-zh="电话" data-i18n-ja="電話">Phone</strong> <a href="sms:3012634246">301‑263‑4246</a></div>
-    <div class="item"><strong data-i18n data-i18n-en="Email" data-i18n-zh="邮箱" data-i18n-ja="メール">Email</strong> <a href="mailto:zai28@terpmail.umd.edu">zai28@terpmail.umd.edu</a></div>
+    <div class="item"><strong data-i18n data-i18n-en="Email" data-i18n-zh="邮箱" data-i18n-ja="メール">Email</strong> <a href="mailto:zai28@umd.edu">zai28@umd.edu</a></div>
     <div class="item"><strong data-i18n data-i18n-en="Follow me" data-i18n-zh="关注我" data-i18n-ja="フォローしてください">Follow me</strong>
       <a href="https://www.linkedin.com/in/zai28" target="_blank" rel="noopener" aria-label="LinkedIn">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle; margin:0 .25rem;">
@@ -3206,79 +3623,166 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <main>
     <!-- Featured -->
-    <section id="featured" class="section reveal slide-left">
-      <div class="container">
-        <h2 data-i18n data-i18n-en="Featured" data-i18n-zh="精选" data-i18n-ja="注目">Featured</h2>
-        <div class="cards">
-          <article class="card reveal">
-            <div class="thumb"><img src="/images/aitin-1.png" alt="AItinerary app screenshot" data-i18n data-i18n-attrs="alt" data-i18n-alt-en="AItinerary app screenshot" data-i18n-alt-zh="AItinerary 应用截图" data-i18n-alt-ja="AItinerary アプリのスクリーンショット" loading="lazy" decoding="async"></div>
-            <h3 data-i18n data-i18n-en="AItinerary (Preview)" data-i18n-zh="AItinerary（预览）" data-i18n-ja="AItinerary（プレビュー）">AItinerary (Preview)</h3>
-            <p data-i18n data-i18n-html
-               data-i18n-en='Meet <strong>Aitin</strong>, your AI travel copilot—instantly pulling real-time flights, hotels, events, and weather into personalized, day-by-day itineraries synced seamlessly with your calendar, with smart recommendations that adapt to your preferences. Travel made easy.'
-               data-i18n-zh='认识 <strong>Aitin</strong>，你的 AI 旅行副驾——聚合航班、酒店、活动与天气，自动生成日程并同步日历；支持多城市/多日、预算约束与动态重排；推荐随历史与偏好自适应，让出行更省心。'
-               data-i18n-ja='あなたのAI旅行コパイロット<strong>Aitin</strong>。フライト・ホテル・イベント・天気をリアルタイムで集約し、カレンダー連携の<strong>日別スケジュール</strong>を自動作成。嗜好に合わせて賢く提案し、旅づくりをもっと簡単にします。'>
-              Meet <strong>Aitin</strong>, your AI travel copilot—instantly pulling real-time flights, hotels, events, and weather into personalized, day-by-day itineraries synced seamlessly with your calendar, with smart recommendations that adapt to your preferences. Travel made easy.
-</p>
-<div class="meta badges">
-  <span class="badge" data-i18n data-i18n-en="React" data-i18n-zh="React">React</span>
-  <span class="badge" data-i18n data-i18n-en="Node" data-i18n-zh="Node.js">Node</span>
-  <span class="badge" data-i18n data-i18n-en="MCP" data-i18n-zh="MCP">MCP</span>
-</div>
-            <div class="card-actions">
-              <a class="btn small" href="#" target="_blank" rel="noopener" data-i18n data-i18n-en="Live" data-i18n-zh="演示" data-i18n-ja="デモ" data-i18n-attrs="aria-label" aria-label="Open AItinerary live preview" data-i18n-aria-label-en="Open AItinerary live preview" data-i18n-aria-label-zh="打开 AItinerary 在线演示" data-i18n-aria-label-ja="AItinerary のライブプレビューを開く">Live</a>
-              <a class="btn small outline" href="#" target="_blank" rel="noopener" data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード" data-i18n-attrs="aria-label" aria-label="View AItinerary code" data-i18n-aria-label-en="View AItinerary code" data-i18n-aria-label-zh="查看 AItinerary 源码" data-i18n-aria-label-ja="AItinerary のコードを見る">Code</a>
-            </div>
-          </article>
+<section id="featured" class="section reveal slide-left">
+  <div class="container">
+    <h2 data-i18n data-i18n-en="Featured" data-i18n-zh="精选" data-i18n-ja="注目">Featured</h2>
+    <div class="cards">
 
-          <article class="card reveal">
-            <div class="thumb">
-              <img src="/images/uw.png" alt="Underwater Depth Estimation" data-i18n data-i18n-attrs="alt" data-i18n-alt-en="Underwater Depth Estimation" data-i18n-alt-zh="水下深度估计" data-i18n-alt-ja="水中深度推定" loading="lazy" decoding="async">
-            </div>
-            <h3 data-i18n data-i18n-en="Underwater Depth (RGB + Sonar)" data-i18n-zh="水下深度估计（RGB + 声呐）" data-i18n-ja="水中深度推定（RGB + ソナー）">Underwater Depth (RGB + Sonar)</h3>
-            <p data-i18n data-i18n-html
-               data-i18n-en='Research on robust depth estimation in challenging underwater environments. My work extends benchmark studies with experiments on <strong>RGB + sonar fusion</strong>, exploring reliability when vision alone fails in turbid, low-light, or high-scattering conditions.'
-               data-i18n-zh='在复杂水下环境中的鲁棒深度估计研究。基于<strong>RGB + 声呐融合</strong>，在浑浊、弱光或强散射等视觉失效条件下评估方法可靠性；覆盖时间同步/空间对齐、噪声与散射强度，并对比主流基线。'
-               data-i18n-ja='厳しい水中環境における<strong>堅牢な深度推定</strong>の研究。<strong>RGB とソナーの融合</strong>で、濁り・低照度・強散乱など視覚破綻下でも信頼性を検証。時刻/空間整合やノイズ/散乱強度を含むベンチマークと基準法比較まで。'>
-              Research on robust depth estimation in challenging underwater environments.  
-My work extends benchmark studies with experiments on <strong>RGB + sonar fusion</strong>, exploring reliability when vision alone fails in turbid, low-light, or high-scattering conditions.
-            </p>
-            <div class="meta badges">
-              <span class="badge" data-i18n data-i18n-en="PyTorch" data-i18n-zh="PyTorch">PyTorch</span>
-              <span class="badge" data-i18n data-i18n-en="Depth Anything V2" data-i18n-zh="Depth Anything V2">Depth Anything V2</span>
-              <span class="badge" data-i18n data-i18n-en="Multimodal" data-i18n-zh="Multimodal">Multimodal</span>
-            </div>
-            <div class="card-actions">
-              <a class="btn small" href="https://arxiv.org/abs/2507.02148" target="_blank" rel="noopener" data-i18n data-i18n-en="Paper" data-i18n-zh="论文" data-i18n-ja="論文" data-i18n-attrs="aria-label" aria-label="Open paper on arXiv" data-i18n-aria-label-en="Open paper on arXiv" data-i18n-aria-label-zh="在 arXiv 打开论文" data-i18n-aria-label-ja="arXivで論文を開く">Paper</a>
-              <a class="btn small outline" href="#" target="_blank" rel="noopener" data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード" data-i18n-attrs="aria-label" aria-label="View code for Underwater Depth" data-i18n-aria-label-en="View code for Underwater Depth" data-i18n-aria-label-zh="查看水下深度项目代码" data-i18n-aria-label-ja="Underwater Depth のコードを見る">Code</a>
-            </div>
-          </article>
-
-          <article class="card reveal">
-  <div class="thumb">
-    <img src="/images/plan.png" alt="UMD Class Planning Tool" data-i18n data-i18n-attrs="alt" data-i18n-alt-en="UMD Class Planning Tool" data-i18n-alt-zh="马大课程与通勤规划工具" data-i18n-alt-ja="UMD 授業・通学プランナー" loading="lazy" decoding="async">
-  </div>
-  <h3 data-i18n data-i18n-en="UMD Class & Commute Planner" data-i18n-zh="马里兰大学课程与通勤规划工具" data-i18n-ja="UMD 授業・通学プランナー">UMD Class & Commute Planner</h3>
-  <p data-i18n data-i18n-html
-     data-i18n-en='An <strong>interactive data visualization tool</strong> to help UMD students design their class schedules and optimize commutes. Features include <strong>bus route overlays</strong>, <strong>prerequisite trees</strong>, and <strong>professor rating & GPA correlation</strong>. Built with open UMD.io and PlanetTerp APIs.'
-     data-i18n-zh='用于帮助马里兰大学学生设计课程表并优化通勤的<strong>交互式可视化工具</strong>。功能包括<strong>公交路线叠加</strong>、<strong>先修课关系树</strong>以及<strong>教授评分与 GPA 相关性</strong>；基于开放的 UMD.io 与 PlanetTerp API 构建。'
-     data-i18n-ja='UMD 学生の<strong>時間割作成と通学最適化</strong>を支援する<strong>可視化ツール</strong>。<strong>バス路線の重ね合わせ</strong>、<strong>必修関係ツリー</strong>、<strong>教授評価×GPA 相関</strong>などを搭載。UMD.io と PlanetTerp の公開APIで構築、<strong>直感的 UI</strong> で素早く比較・計画。'>
-    An <strong>interactive data visualization tool</strong> to help UMD students design their class schedules and optimize commutes.  
-    Features include <strong>bus route overlays</strong>, <strong>prerequisite trees</strong>, and <strong>professor rating & GPA correlation</strong>.
-    Built with open UMD.io and PlanetTerp APIs.
-  </p>
-  <div class="meta badges">
-    <span class="badge" data-i18n data-i18n-en="HTML/CSS/JS" data-i18n-zh="HTML/CSS/JS">HTML/CSS/JS</span>
-    <span class="badge" data-i18n data-i18n-en="UI/UX" data-i18n-zh="UI/UX">UI/UX</span>
-    <span class="badge" data-i18n data-i18n-en="APIs" data-i18n-zh="API">APIs</span>
-  </div>
-  <div class="card-actions">
-    <a class="btn small" href="https://zijie-cai.github.io/umd_schedule/" target="_blank" rel="noopener" data-i18n data-i18n-en="Live" data-i18n-zh="演示" data-i18n-ja="デモ" data-i18n-attrs="aria-label" aria-label="Open UMD Class & Commute live" data-i18n-aria-label-en="Open UMD Class & Commute live" data-i18n-aria-label-zh="打开 UMD 选课与通勤规划演示" data-i18n-aria-label-ja="UMD 授業・通学デモを開く">Live</a>
-    <a class="btn small outline" href="https://github.com/zijie-cai/umd_schedule" target="_blank" rel="noopener" data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード" data-i18n-attrs="aria-label" aria-label="View code on GitHub" data-i18n-aria-label-en="View code on GitHub" data-i18n-aria-label-zh="在 GitHub 查看代码" data-i18n-aria-label-ja="GitHub でコードを見る">Code</a>
-  </div>
-</article>
+      <!-- AItinerary -->
+      <article class="card reveal">
+        <div class="thumb">
+          <img src="/images/aitin-1.png" alt="AItinerary app screenshot"
+               data-i18n data-i18n-attrs="alt"
+               data-i18n-alt-en="AItinerary app screenshot"
+               data-i18n-alt-zh="AItinerary 应用截图"
+               data-i18n-alt-ja="AItinerary アプリのスクリーンショット"
+               loading="lazy" decoding="async">
         </div>
-      </div>
-    </section>
+        <h3 data-i18n data-i18n-en="AItinerary (Preview)" data-i18n-zh="AItinerary（预览）" data-i18n-ja="AItinerary（プレビュー）">
+          AItinerary (Preview)
+        </h3>
+
+        <!-- Desktop description -->
+        <p class="card-desc card-desc--desktop" data-i18n data-i18n-html
+           data-i18n-en='Meet <strong>Aitin</strong>, your AI travel copilot—instantly pulling real-time flights, hotels, events, and weather into personalized, day-by-day itineraries synced seamlessly with your calendar, with smart recommendations that adapt to your preferences. Travel made easy.'
+           data-i18n-zh='认识 <strong>Aitin</strong>，你的 AI 旅行副驾——聚合航班、酒店、活动与天气，自动生成日程并同步日历；支持多城市/多日、预算约束与动态重排；推荐随历史与偏好自适应，让出行更省心。'
+           data-i18n-ja='あなたのAI旅行コパイロット<strong>Aitin</strong>。フライト・ホテル・イベント・天気をリアルタイムで集約し、カレンダー連携の<strong>日別スケジュール</strong>を自動作成。嗜好に合わせて賢く提案し、旅づくりをもっと簡単にします。'>
+        </p>
+
+        <!-- Mobile description -->
+        <p class="card-desc card-desc--mobile" data-i18n data-i18n-html
+           data-i18n-en='Meet <strong>Aitin</strong>, your AI travel copilot—pulling real-time flights, hotels, events, and weather into personalized day-by-day itineraries synced with your calendar, with smart recommendations that adapt to your preferences. Travel made easy.'
+          data-i18n-zh='认识 <strong>Aitin</strong>，你的 AI 旅行副驾—聚合航班、酒店、活动与天气，自动生成日程并同步日历；支持多城市/多日、预算约束与动态重排；推荐随历史与偏好自适应，让出行更省心。'
+           data-i18n-ja='あなたのAI旅行コパイロット<strong>Aitin</strong>。フライト・ホテル・イベント・天気をリアルタイムで集約し、カレンダー連携の<strong>日別スケジュール</strong>を自動作成。嗜好に合わせて賢く提案し、旅づくりをもっと簡単にします。'>
+        </p>
+
+        <div class="meta badges">
+          <span class="badge" data-i18n data-i18n-en="React" data-i18n-zh="React">React</span>
+          <span class="badge" data-i18n data-i18n-en="Node" data-i18n-zh="Node.js">Node</span>
+          <span class="badge" data-i18n data-i18n-en="MCP" data-i18n-zh="MCP">MCP</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn small" href="#" target="_blank" rel="noopener"
+             data-i18n data-i18n-en="Live" data-i18n-zh="演示" data-i18n-ja="デモ"
+             data-i18n-attrs="aria-label"
+             aria-label="Open AItinerary live preview"
+             data-i18n-aria-label-en="Open AItinerary live preview"
+             data-i18n-aria-label-zh="打开 AItinerary 在线演示"
+             data-i18n-aria-label-ja="AItinerary のライブプレビューを開く">Live</a>
+          <a class="btn small outline" href="#" target="_blank" rel="noopener"
+             data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード"
+             data-i18n-attrs="aria-label"
+             aria-label="View AItinerary code"
+             data-i18n-aria-label-en="View AItinerary code"
+             data-i18n-aria-label-zh="查看 AItinerary 源码"
+             data-i18n-aria-label-ja="AItinerary のコードを見る">Code</a>
+        </div>
+      </article>
+
+      <!-- Underwater Depth -->
+      <article class="card reveal">
+        <div class="thumb">
+          <img src="/images/uw.png" alt="Underwater Depth Estimation"
+               data-i18n data-i18n-attrs="alt"
+               data-i18n-alt-en="Underwater Depth Estimation"
+               data-i18n-alt-zh="水下深度估计"
+               data-i18n-alt-ja="水中深度推定"
+               loading="lazy" decoding="async">
+        </div>
+        <h3 data-i18n data-i18n-en="Underwater Depth (RGB + Sonar)" data-i18n-zh="水下深度估计（RGB + 声呐）" data-i18n-ja="水中深度推定（RGB + ソナー）">
+          Underwater Depth (RGB + Sonar)
+        </h3>
+
+        <!-- Desktop description -->
+        <p class="card-desc card-desc--desktop" data-i18n data-i18n-html
+           data-i18n-en='Research on robust depth estimation in challenging underwater environments. My work extends benchmark studies with experiments on <strong>RGB + sonar fusion</strong>, exploring reliability when vision alone fails in turbid, low-light, or high-scattering conditions.'
+           data-i18n-zh='在复杂水下环境中的鲁棒深度估计研究。基于<strong>RGB + 声呐融合</strong>，在浑浊、弱光或强散射等视觉失效条件下评估方法可靠性；覆盖时间同步/空间对齐、噪声与散射强度，并对比主流基线。'
+           data-i18n-ja='厳しい水中環境における<strong>堅牢な深度推定</strong>の研究。<strong>RGB とソナーの融合</strong>で、濁り・低照度・強散乱など視覚破綻下でも信頼性を検証。時刻/空間整合やノイズ/散乱強度を含むベンチマークと基準法比較まで。'>
+        </p>
+
+        <!-- Mobile description -->
+        <p class="card-desc card-desc--mobile" data-i18n data-i18n-html
+           data-i18n-en='Research on robust depth estimation in challenging underwater environments. My work extends benchmark studies with experiments on <strong>RGB + sonar fusion</strong>, exploring reliability when vision alone fails in turbid or high-scattering conditions.'
+           data-i18n-zh='在复杂水下环境中的鲁棒深度估计研究。基于<strong>RGB + 声呐融合</strong>，在浑浊或强散射等视觉失效条件下评估方法可靠性；覆盖时间同步/空间对齐、噪声与散射强度，并对比主流基线。'
+           data-i18n-ja='厳しい水中環境における<strong>堅牢な深度推定</strong>の研究。<strong>RGB とソナーの融合</strong>で、濁り・低照度・強散乱など視覚破綻下でも信頼性を検証。時刻/空間整合やノイズ/散乱強度を含むベンチマークと基準法比較まで。'>
+        </p>
+
+        <div class="meta badges">
+          <span class="badge" data-i18n data-i18n-en="PyTorch" data-i18n-zh="PyTorch">PyTorch</span>
+          <span class="badge" data-i18n data-i18n-en="Depth Anything V2" data-i18n-zh="Depth Anything V2">Depth Anything V2</span>
+          <span class="badge" data-i18n data-i18n-en="Multimodal" data-i18n-zh="Multimodal">Multimodal</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn small" href="https://arxiv.org/abs/2507.02148" target="_blank" rel="noopener"
+             data-i18n data-i18n-en="Paper" data-i18n-zh="论文" data-i18n-ja="論文"
+             data-i18n-attrs="aria-label"
+             aria-label="Open paper on arXiv"
+             data-i18n-aria-label-en="Open paper on arXiv"
+             data-i18n-aria-label-zh="在 arXiv 打开论文"
+             data-i18n-aria-label-ja="arXivで論文を開く">Paper</a>
+          <a class="btn small outline" href="#" target="_blank" rel="noopener"
+             data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード"
+             data-i18n-attrs="aria-label"
+             aria-label="View code for Underwater Depth"
+             data-i18n-aria-label-en="View code for Underwater Depth"
+             data-i18n-aria-label-zh="查看水下深度项目代码"
+             data-i18n-aria-label-ja="Underwater Depth のコードを見る">Code</a>
+        </div>
+      </article>
+
+      <!-- UMD Class Planner -->
+      <article class="card reveal">
+        <div class="thumb">
+          <img src="/images/plan.png" alt="UMD Class Planning Tool"
+               data-i18n data-i18n-attrs="alt"
+               data-i18n-alt-en="UMD Class Planning Tool"
+               data-i18n-alt-zh="马大课程与通勤规划工具"
+               data-i18n-alt-ja="UMD 授業・通学プランナー"
+               loading="lazy" decoding="async">
+        </div>
+        <h3 data-i18n data-i18n-en="UMD Class & Commute Planner" data-i18n-zh="马里兰大学课程与通勤规划工具" data-i18n-ja="UMD 授業・通学プランナー">
+          UMD Class & Commute Planner
+        </h3>
+
+        <!-- Desktop description -->
+        <p class="card-desc card-desc--desktop" data-i18n data-i18n-html
+           data-i18n-en='An <strong>interactive data visualization tool</strong> to help UMD students design their class schedules and optimize commutes. Features include <strong>bus route overlays</strong>, <strong>prerequisite trees</strong>, and <strong>professor rating & GPA correlation</strong>. Built with open UMD.io and PlanetTerp APIs.'
+           data-i18n-zh='用于帮助马里兰大学学生设计课程表并优化通勤的<strong>交互式可视化工具</strong>。功能包括<strong>公交路线叠加</strong>、<strong>先修课关系树</strong>以及<strong>教授评分与 GPA 相关性</strong>；基于开放的 UMD.io 与 PlanetTerp API 构建。'
+           data-i18n-ja='UMD 学生の<strong>時間割作成と通学最適化</strong>を支援する<strong>可視化ツール</strong>。<strong>バス路線の重ね合わせ</strong>、<strong>必修関係ツリー</strong>、<strong>教授評価×GPA 相関</strong>などを搭載。UMD.io と PlanetTerp の公開APIで構築、<strong>直感的 UI</strong> で素早く比較・計画。'>
+        </p>
+
+        <!-- Mobile description -->
+        <p class="card-desc card-desc--mobile" data-i18n data-i18n-html
+           data-i18n-en='An <strong>interactive data visualization tool</strong> to help UMD students design their class schedules and optimize commutes. Features include <strong>bus route overlays</strong>, <strong>prerequisite trees</strong>, and <strong>professor rating & GPA correlation</strong>. Built with open UMD.io and PlanetTerp APIs.'
+           data-i18n-zh='用于帮助马大学生设计课程表并优化通勤的<strong>交互式可视化工具</strong>。功能包括<strong>公交路线叠加</strong>、<strong>先修课关系树</strong>以及<strong>教授评分与 GPA 相关性</strong>；基于开放的 UMD.io 与 PlanetTerp API 构建。'
+           data-i18n-ja='UMD 学生の<strong>時間割作成と通学最適化</strong>を支援する<strong>可視化ツール</strong>。<strong>バス路線の重ね合わせ</strong>、<strong>必修関係ツリー</strong>、<strong>教授評価×GPA 相関</strong>などを搭載。UMD.io と PlanetTerp の公開APIで構築、<strong>直感的 UI</strong> で素早く比較・計画。'>
+        </p>
+
+        <div class="meta badges">
+          <span class="badge" data-i18n data-i18n-en="HTML/CSS/JS" data-i18n-zh="HTML/CSS/JS">HTML/CSS/JS</span>
+          <span class="badge" data-i18n data-i18n-en="UI/UX" data-i18n-zh="UI/UX">UI/UX</span>
+          <span class="badge" data-i18n data-i18n-en="APIs" data-i18n-zh="API">APIs</span>
+        </div>
+        <div class="card-actions">
+          <a class="btn small" href="https://zijie-cai.github.io/umd_schedule/" target="_blank" rel="noopener"
+             data-i18n data-i18n-en="Live" data-i18n-zh="演示" data-i18n-ja="デモ"
+             data-i18n-attrs="aria-label"
+             aria-label="Open UMD Class & Commute live"
+             data-i18n-aria-label-en="Open UMD Class & Commute live"
+             data-i18n-aria-label-zh="打开 UMD 选课与通勤规划演示"
+             data-i18n-aria-label-ja="UMD 授業・通学デモを開く">Live</a>
+          <a class="btn small outline" href="https://github.com/zijie-cai/umd_schedule" target="_blank" rel="noopener"
+             data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード"
+             data-i18n-attrs="aria-label"
+             aria-label="View code on GitHub"
+             data-i18n-aria-label-en="View code on GitHub"
+             data-i18n-aria-label-zh="在 GitHub 查看代码"
+             data-i18n-aria-label-ja="GitHub でコードを見る">Code</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
     <!-- Projects -->
     <section id="projects" class="section reveal slide-right">
@@ -3417,8 +3921,8 @@ My work extends benchmark studies with experiments on <strong>RGB + sonar fusion
               <li class="xp-item reveal">
                 <div class="xp-body">
                   <div class="xp-date" data-i18n data-i18n-en="May 2025 – Present" data-i18n-zh="2025 年 5 月 – 至今" data-i18n-ja="2025 年 5 月 – 現在">May 2025 – Present</div>
-                  <div class="xp-role" data-i18n data-i18n-en="Program Lead — AI &amp; Machine Learning" data-i18n-zh="项目负责 — AI 与机器学习" data-i18n-ja="プログラムリード — AI・機械学習">Instructor — AI &amp; Machine Learning</div>
-                  <div class="xp-org" data-i18n data-i18n-en="Internal Drive (iD Tech), College Park, MD" data-i18n-zh="Internal Drive（iD Tech），马里兰州科利奇帕克" data-i18n-ja="Internal Drive（iD Tech）, メリーランド州カレッジパーク">Internal Drive (iD Tech), College Park, MD</div>
+                  <div class="xp-role" data-i18n data-i18n-en="Program Lead — AI &amp; ML" data-i18n-zh="项目负责 — AI 与机器学习" data-i18n-ja="プログラムリード — AI・機械学習">Instructor — AI &amp; ML</div>
+                  <div class="xp-org" data-i18n data-i18n-en="Internal Drive Inc, College Park, MD" data-i18n-zh="Internal Drive Inc，马里兰州科利奇帕克" data-i18n-ja="Internal Drive Inc, メリーランド州カレッジパーク">Internal Drive Inc, College Park, MD</div>
                   <ul class="xp-desc">
                     <li data-i18n data-i18n-html data-i18n-en="Delivered project-based instruction on <strong>Python</strong>, <strong>ML</strong>, and <strong>prompt engineering</strong> using <strong>OpenAI API</strong>, <strong>Keras</strong>, <strong>NumPy</strong>, and <strong>Pandas</strong>." data-i18n-zh="基于项目教授 <strong>Python</strong> 与 <strong>机器学习</strong>，使用 <strong>OpenAI API</strong>、<strong>Keras</strong>、<strong>NumPy</strong>、<strong>Pandas</strong>；涵盖数据清洗/可视化、训练评估与云端部署。" data-i18n-ja="プロジェクト型で <strong>Python</strong>/<strong>機械学習</strong> を指導。<strong>OpenAI API</strong>・<strong>Keras</strong> などで、データ整形/可視化、学習/評価、クラウド展開まで対応。">Delivered project-based instruction on Python, ML, and prompt engineering using OpenAI API, Keras, NumPy, and Pandas.</li>
                     <li data-i18n data-i18n-html data-i18n-en="Designed and led labs in <strong>computer vision</strong>, <strong>NLP</strong>, and <strong>text/audio generation</strong> with <strong>Neural Networks</strong> and <strong>TTS/STT APIs</strong>." data-i18n-zh="设计并带领 <strong>计算机视觉</strong>、<strong>NLP</strong>、<strong>文本/语音生成</strong> 实验，结合 <strong>TTS/STT</strong> 接口；涵盖分类/检测、情感分析、并从零搭建数据管线与推理脚本。" data-i18n-ja="<strong>計算機視覚</strong>・<strong>NLP</strong>・<strong>テキスト/音声生成</strong> の演習を設計・主導。<strong>TTS/STT</strong> API を活用し、分類/検出・感情分析、データパイプライン/推論スクリプト構築まで、ハンズオンで実装・評価。">Designed and led labs in computer vision, NLP, and text/audio generation with Neural Networks and TTS/STT APIs.</li>
@@ -3674,7 +4178,7 @@ My work extends benchmark studies with experiments on <strong>RGB + sonar fusion
 
       <div>
         <label for="message" data-i18n data-i18n-en="Message" data-i18n-zh="留言" data-i18n-ja="メッセージ">Message</label>
-        <textarea id="message" name="message" rows="6" maxlength="1200" placeholder="Tell me about your idea, timeline, and goals…" required data-i18n data-i18n-attrs="placeholder" data-i18n-placeholder-en="Tell me about your idea, timeline, and goals…" data-i18n-placeholder-zh="介绍一下你的想法、时间规划和目标…" data-i18n-placeholder-ja="アイデア、スケジュール、目標について教えてください…"></textarea>
+        <textarea id="message" name="message" rows="6" maxlength="1200" placeholder="Drop your idea, timeline, and goals…" required data-i18n data-i18n-attrs="placeholder" data-i18n-placeholder-en="Drop your idea, timeline, and goals…" data-i18n-placeholder-zh="介绍一下你的想法、时间规划和目标…" data-i18n-placeholder-ja="アイデア、スケジュール、目標について教えてください…"></textarea>
         <div class="char-counter" id="charCounter">0 / 1200</div>
       </div>
 
@@ -4606,6 +5110,239 @@ as
   
 </div>
 
+
+
+<style>
+  
+  /* Mobile alignment overrides: keep About + CTAs left-aligned on phones */
+  @media (max-width: 900px) {
+    .hello { text-align: center; }
+    .hello .blurb { text-align: center; }
+    /* Center hero CTAs on mobile */
+    .hello .cta-row { justify-content: center; }
+  }
+  @media (max-width: 600px) {
+    .hello .cta-row { justify-content: center !important; }
+  }
+  /* Mobile: make quick-contact (Phone/Email/Follow me) more compact */
+  @media (max-width: 600px) {
+    /* Smaller and closer to hero; tighten space above Scroll Down */
+    .hello-meta { gap: .35rem; padding: .35rem .5rem .3rem; margin: .05rem auto .3rem; }
+    .hello-meta .item { font-size: .78rem; line-height: 1.2; }
+    .hello-meta .item strong { font-size: .84rem; line-height: 1.1; }
+    .hello-meta svg { width: 12px; height: 12px; }
+    .hello-meta .item a { font-size: inherit; }
+  }
+  @media (max-width: 430px) {
+    .hello-meta { gap: -10rem; padding: 0.8rem 0rem 0rem; margin: -22rem auto 0rem; }
+    .hello-meta .item { font-size: .72rem; line-height: 1.15; }
+    .hello-meta .item strong { font-size: .8rem; line-height: 1.05; }
+    .hello-meta svg { width: 11px; height: 11px; }
+  }
+  /* Mobile: keep quick-contact on one row (3 columns) */
+  @media (max-width: 600px) {
+    .hello-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: start;
+      text-align: center;
+    }
+    .hello-meta .item { display: grid; gap: .2rem; justify-items: center; }
+    .hello-meta .item a { word-break: break-word; }
+  }
+  /* Mobile: in the Follow me cell, keep icons side-by-side under the label with fixed spacing */
+  @media (max-width: 600px) {
+    .hello-meta .item:last-child {
+      display: block !important; /* avoid grid track sizing influenced by label */
+      text-align: center;
+    }
+    .hello-meta .item:last-child strong {
+      display: block;
+      margin-bottom: .1rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; min-height: 1.1em;
+    }
+    .hello-meta .item:last-child a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0; /* reset any default margins */
+      vertical-align: middle;
+    }
+    .hello-meta .item:last-child a + a { margin-left: .2rem; } /* fixed, consistent spacing */
+    .hello-meta .item:last-child a svg { margin: 0 !important; }
+  }
+
+  
+
+  /* Mobile: significantly smaller hero CTA circles */
+  @media (max-width: 600px) {
+    .hello .cta { width: 88px; height: 88px; font-size: .9rem; border-radius: 50%; aspect-ratio: 1 / 1; box-sizing: border-box; }
+    .hello .cta-row { gap: .5rem; }
+  }
+  @media (max-width: 430px) {
+    .hello .cta { width: 78px; height: 78px; font-size: .7rem; border-radius: 50%; aspect-ratio: 1 / 1; box-sizing: border-box; }
+    .hello .cta-row { gap: .45rem; }
+  }
+  /* Mobile soccer icon override (late in cascade). Desktop unchanged. */
+  /* Adjusted dot animation for smaller mobile control */
+  @keyframes scrollAnimSm {
+    0%   { opacity: 0; transform: translate(-50%, -3px); }
+    50%  { opacity: 1; transform: translate(-50%, 8px); }
+    100% { opacity: 0; transform: translate(-50%, 16px); }
+  }
+  @keyframes scrollAnimXs {
+    0%   { opacity: 0; transform: translate(-50%, -2px); }
+    50%  { opacity: 1; transform: translate(-50%, 6px); }
+    100% { opacity: 0; transform: translate(-50%, 12px); }
+  }
+  /* Mobile: make the Scroll Down control much smaller */
+  @media (max-width: 600px) {
+    .container_mouse { margin-top: 0; }
+    .container_mouse span { font-size: 0.6rem; }
+    .mouse-btn { width: 14px; height: 24px; border-width: 2px; margin-bottom: 0.12rem; }
+    .mouse-scroll { width: 2.5px; height: 2.5px; top: 4px; animation-name: scrollAnimSm; animation-duration: .65s; }
+  }
+  @media (max-width: 430px) {
+    .container_mouse { margin-top: 0.45rem; }
+    .container_mouse span { font-size: 0.55rem; }
+    .mouse-btn { width: 12px; height: 20px; margin-bottom: 0.08rem; }
+    .mouse-scroll { width: 2px; height: 2px; top: 3px; animation-name: scrollAnimXs; animation-duration: .6s; }
+  }
+  @media (max-width: 900px) {
+    .icon-ring-mobile .slot.soccer {
+      transform: translate(-50%, -50%) rotate(80deg) translate(calc(50% + 44px)) rotate(-80deg) !important;
+    }
+  }
+  @media (max-width: 600px) {
+    .icon-ring-mobile .slot.soccer {
+      transform: translate(-50%, -50%) rotate(80deg) translate(calc(50% + 40px)) rotate(-80deg) !important;
+    }
+  }
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.soccer {
+      /* Keep within avatar bounds to avoid horizontal overflow */
+      transform: translate(-50%, -50%) rotate(35deg) translate(calc(50% + 158px)) rotate(-35deg) !important;
+    }
+  }
+  /* Force code icon to the top-left across mobile sizes */
+  @media (max-width: 900px) {
+    .icon-ring-mobile .slot.code {
+      transform: translate(-50%, -50%) rotate(-135deg) translate(calc(50% + 30px)) rotate(135deg) !important;
+    }
+  }
+  @media (max-width: 600px) {
+    .icon-ring-mobile .slot.code {
+      transform: translate(-50%, -50%) rotate(-135deg) translate(calc(50% + 26px)) rotate(135deg) !important;
+    }
+  }
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.code {
+      transform: translate(-50%, -50%) rotate(-145deg) translate(calc(50% + 158px)) rotate(145deg) !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.game {
+      transform: translate(-50%, -50%) rotate(-40deg) translate(calc(50% + 140px)) rotate(40deg) !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.world {
+      transform: translate(-50%, -50%) rotate(142deg) translate(calc(50% + 135px)) rotate(-142deg) !important;
+    }
+  }
+
+   @media (max-width: 430px) {
+    .icon-ring-mobile .slot.world img.world-icon {
+      width: 52px !important;
+      height: 52px !important;
+    }
+  }
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.coffee img.coffee-icon {
+      width: 42px !important;
+      height: 42px !important;
+    }
+  }
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.code img.code-icon {
+      width: 48px !important;
+      height: 48px !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.coffee {
+      transform: translate(-50%, -50%) rotate(180deg) translate(calc(50% + 128px)) rotate(-180deg) !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.cooking {
+      transform: translate(-50%, -50%) rotate(0deg) translate(calc(50% + 128px)) rotate(0deg) !important;
+    }
+  }
+  @media (max-width: 430px) {
+    .icon-ring-mobile .slot.cooking img.cooking-icon {
+      width: 54px !important;
+      height: 54px !important;
+    }
+  }
+
+
+</style>
+
+<style>
+  /* Mobile-only: tighten just the top margin of the hero heading */
+  @media (max-width: 600px) {
+    .hello h1 { margin-top: 5rem !important; }
+  }
+  @media (max-width: 430px) {
+    .hello h1 { margin-top: -18rem !important; }
+  }
+</style>
+
+<script>
+// Mobile-only: enlarge just the About label
+</script>
+
+<style>
+  @media (max-width: 600px) {
+    .hello .blurb .about-me-label {
+      font-size: 1.05em !important;
+      line-height: 1.2;
+      display: inline-block;
+      margin-bottom: .15rem;
+    }
+  }
+  @media (max-width: 430px) {
+    .hello .blurb .about-me-label {
+      font-size: 1.2em !important;
+      line-height: 1.25;
+      display: inline-block;
+      margin-bottom: .5rem;
+    }
+  }
+</style>
+
+<script>
+  // Prevent double-tap to zoom on mobile while preserving pinch-zoom
+  (function(){
+    try {
+      const isTouch = window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      if (!isTouch) return;
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd < 300) {
+          e.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, true);
+    } catch(_) {}
+  })();
+</script>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const spinner = document.querySelector(".map-spinner");
@@ -4630,27 +5367,77 @@ as
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const sections = document.querySelectorAll("section[id]");
-  const navLinks = document.querySelectorAll(".nav-links a");
+  // Track both sections and header hero so top area highlights too
+  const sections = document.querySelectorAll("section[id], header[id]");
+  const desktopLinks = document.querySelectorAll(".nav-links a");
+  const mobileLinks = document.querySelectorAll(".nav-links-mobile a");
+
+  const clearCurrent = () => {
+    [...desktopLinks, ...mobileLinks].forEach(link => link.removeAttribute("aria-current"));
+  };
+  const setCurrent = (id) => {
+    const d = document.querySelector(`.nav-links a[href="#${id}"]`);
+    const m = document.querySelector(`.nav-links-mobile a[href="#${id}"]`);
+    if (d) d.setAttribute("aria-current", "true");
+    if (m) m.setAttribute("aria-current", "true");
+  };
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const id = entry.target.getAttribute("id");
       if (entry.isIntersecting) {
-        // Remove highlight from all
-        navLinks.forEach(link => link.removeAttribute("aria-current"));
-        // Highlight the current
-        const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
-        if (activeLink) {
-          activeLink.setAttribute("aria-current", "true");
-        }
+        clearCurrent();
+        setCurrent(id);
       }
     });
   }, { rootMargin: "-40% 0px -55% 0px", threshold: 0.1 });
 
   sections.forEach(section => observer.observe(section));
+
+  // Initial highlight based on hash or default to 'about'
+  const hash = (location.hash || '').replace('#','');
+  if (hash) {
+    clearCurrent(); setCurrent(hash);
+  } else {
+    clearCurrent(); setCurrent('about');
+  }
+
+  // Scroll fallback to keep highlight in sync across edge cases
+  let ticking = false;
+  const secList = Array.from(sections);
+  const updateByScroll = () => {
+    ticking = false;
+    const offset = 280; // approximate sticky nav height + padding
+    const y = window.scrollY + offset;
+    let currentId = secList[0] ? secList[0].id : undefined;
+    for (const s of secList) {
+      const top = s.offsetTop;
+      if (top <= y) currentId = s.id;
+    }
+    if (currentId) { clearCurrent(); setCurrent(currentId); }
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateByScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+  window.addEventListener('resize', () => updateByScroll());
 });
 </script>
+
+<style>
+  /* Final pass: improve About blurb readability on mobile */
+  @media (max-width: 600px) {
+    .hello .blurb { font-size: 1.12rem !important; line-height: 1.6 !important; }
+    .hello .blurb .pill { font-size: .95rem !important; padding: .24rem .5rem !important; }
+  }
+  @media (max-width: 430px) {
+    .hello .blurb { font-size: 0.75rem !important; line-height: 1.25 !important; }
+    .hello .blurb .pill { font-size: .65rem !important; padding: .28rem .25rem .16rem .25rem !important; }
+    
+  }
+</style>
 
 <script>
   // ===== Scroll-linked animations (dialed down on small screens or reduced motion) =====
@@ -4741,15 +5528,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Gentle parallax on card/project thumbnails (tied to scroll)
-    document.querySelectorAll('.card .thumb, .project-card .thumb').forEach((el) => {
-      gsap.fromTo(el,
-        { yPercent: -6 },
-        {
-          yPercent: 6,
-          scrollTrigger: { trigger: el, start: 'top 90%', end: 'bottom 10%', scrub: true }
-        }
-      );
-    });
+    // Disable on mobile to avoid competing with flip animations and reduce jank
+    if (!window.matchMedia('(max-width: 900px)').matches) {
+      document.querySelectorAll('.card .thumb, .project-card .thumb').forEach((el) => {
+        gsap.fromTo(el,
+          { yPercent: -6 },
+          {
+            yPercent: 6,
+            scrollTrigger: { trigger: el, start: 'top 90%', end: 'bottom 10%', scrub: true }
+          }
+        );
+      });
+    }
 
     // Skill bars fill with scroll progress
     document.querySelectorAll('.skill .bar > i').forEach((bar) => {
@@ -4802,24 +5592,29 @@ gsap.utils.toArray('.hello .pill').forEach((pill) => {
   );
 });
 
-// 2) FEATURED — Cards fade/slide in (no scrub for smoother perf)
-if (document.querySelector('#featured .cards')) {
-  gsap.set('#featured .card', { transformPerspective: 600 });
-  gsap.fromTo('#featured .card',
-    { opacity: 0, y: 24 },
-    { opacity: 1, y: 0, stagger: 0.12, duration: 0.8,
-      scrollTrigger: { trigger: '#featured', start: 'top 80%', toggleActions: 'play none none none' }
-    }
-  );
+// 2) FEATURED — Mobile-only: soft tilt + lift (no scrub)
+if (window.matchMedia('(max-width: 900px)').matches && document.querySelector('#featured .cards')) {
+  gsap.utils.toArray('#featured .card').forEach((card, i) => {
+    gsap.fromTo(card,
+      { opacity: 0, y: 28, scale: 0.96, rotateZ: 1.5 },
+      { opacity: 1, y: 0, scale: 1, rotateZ: 0,
+        duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: card, start: 'top 90%', toggleActions: 'play none none none' }
+      }
+    );
+  });
 }
 
 // 3) PROJECTS — Cascade rise (no scrub)
-gsap.fromTo('#projects .project-card',
-  { opacity: 0, y: 26 },
-  { opacity: 1, y: 0, stagger: 0.08, duration: 0.7,
-    scrollTrigger: { trigger: '#projects', start: 'top 75%', toggleActions: 'play none none none' }
-  }
-);
+// Desktop only to avoid conflicting with mobile flip
+if (!window.matchMedia('(max-width: 900px)').matches) {
+  gsap.fromTo('#projects .project-card',
+    { opacity: 0, y: 26 },
+    { opacity: 1, y: 0, stagger: 0.08, duration: 0.7,
+      scrollTrigger: { trigger: '#projects', start: 'top 75%', toggleActions: 'play none none none' }
+    }
+  );
+}
 
 // 3a) PROJECTS — Thumb scale-in once (no scrub)
 gsap.utils.toArray('#projects .project-card .thumb').forEach((thumb) => {
@@ -4920,7 +5715,174 @@ window.addEventListener('load', () => {
   try { if (window.ScrollTrigger) ScrollTrigger.refresh(); } catch(_) {}
 });
 </script>
+<script>
+// Mobile-only scroll reveal for Featured cards — replay on scroll down AND back up
+(function(){
+  var mq = window.matchMedia('(max-width: 900px)');
+  var isMobile = mq.matches;
+  if (!isMobile || !('IntersectionObserver' in window)) return;
+
+  var body = document.body;
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#featured .card'));
+  if (!cards.length) return;
+
+  // Ensure base hidden state only after JS boots
+  if (!body.classList.contains('sr-ready')) body.classList.add('sr-ready');
+
+  // Assign alternating animation flavors & compositor hint
+  cards.forEach(function(card, idx){
+    var mod = idx % 4;
+    if (mod === 0) card.classList.add('anim-lift');
+    else if (mod === 1) card.classList.add('anim-slide-left');
+    else if (mod === 2) card.classList.add('anim-slide-right');
+    else card.classList.add('anim-tilt');
+    card.style.willChange = 'transform, opacity';
+  });
+
+  // Replay logic: toggle is-inview on enter/exit
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var el = entry.target;
+      if (entry.isIntersecting) {
+        // Enter viewport: reveal
+        el.classList.add('is-inview');
+      } else {
+        // Exit viewport: reset so it can animate again next time
+        el.classList.remove('is-inview');
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: '0px 0px -10% 0px',
+    threshold: [0, 0.25, 0.5, 0.75, 1]
+  });
+
+  cards.forEach(function(card){ io.observe(card); });
+
+  // Keep behavior correct if viewport crosses the mobile breakpoint
+  if (mq.addEventListener) {
+    mq.addEventListener('change', function(e){
+      if (!e.matches) {
+        // Leaving mobile: clean up classes and observer
+        body.classList.remove('sr-ready');
+        cards.forEach(function(card){ card.classList.remove('is-inview'); io.unobserve(card); });
+      } else {
+        // Back to mobile: reapply hidden base and observe again
+        body.classList.add('sr-ready');
+        requestAnimationFrame(function(){
+          cards.forEach(function(card){ io.observe(card); });
+        });
+      }
+    });
+  }
+})();
+</script>
+<script>
+// Mobile-only scroll reveal for Experience section — replay on scroll down AND up
+(function(){
+  var mq = window.matchMedia('(max-width: 900px)');
+  if (!mq.matches || !('IntersectionObserver' in window)) return;
+
+  var body = document.body;
+  if (!body.classList.contains('sr-ready')) body.classList.add('sr-ready');
+
+  var panels = Array.prototype.slice.call(document.querySelectorAll('#experience .xp-panel'));
+  var items  = Array.prototype.slice.call(document.querySelectorAll('#experience .xp-item'));
+  if (!panels.length && !items.length) return;
+
+  // Add compositor hints and gentle per-element stagger
+  panels.forEach(function(el, i){
+    el.style.willChange = 'transform, opacity';
+    el.style.transitionDelay = (i % 5) * 40 + 'ms';
+  });
+  items.forEach(function(el, i){
+    el.style.willChange = 'transform, opacity';
+    el.style.transitionDelay = (i % 6) * 30 + 'ms';
+  });
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var el = entry.target;
+      if (entry.isIntersecting) {
+        el.classList.add('is-inview');
+      } else {
+        el.classList.remove('is-inview'); // reset so it replays next time
+      }
+    });
+  }, { root: null, rootMargin: '0px 0px -10% 0px', threshold: [0, 0.15, 0.5, 0.85, 1] });
+
+  panels.concat(items).forEach(function(el){ io.observe(el); });
+
+  // Maintain behavior if viewport crosses breakpoint
+  if (mq.addEventListener) {
+    mq.addEventListener('change', function(e){
+      if (!e.matches) {
+        panels.concat(items).forEach(function(el){
+          el.classList.remove('is-inview'); io.unobserve(el);
+        });
+        body.classList.remove('sr-ready');
+      } else {
+        body.classList.add('sr-ready');
+        requestAnimationFrame(function(){
+          panels.concat(items).forEach(function(el){ io.observe(el); });
+        });
+      }
+    });
+  }
+})();
+</script>
+<script>
+// Mobile-only scroll reveal for Skills — replay on scroll down AND up
+(function(){
+  var mq = window.matchMedia('(max-width: 900px)');
+  if (!mq.matches || !('IntersectionObserver' in window)) return;
+
+  var body = document.body;
+  if (!body.classList.contains('sr-ready')) body.classList.add('sr-ready');
+
+  // Tiles and bars (supports multiple classnames you might be using)
+  var tiles = Array.prototype.slice.call(document.querySelectorAll('#skills .skill, #skills .skill-card'));
+  var bars  = Array.prototype.slice.call(document.querySelectorAll('#skills .bar'));
+  if (!tiles.length && !bars.length) return;
+
+  // Compositor hints + gentle stagger
+  tiles.forEach(function(el, i){
+    el.style.willChange = 'transform, opacity, clip-path';
+    el.style.transitionDelay = (i % 5) * 40 + 'ms';
+  });
+  bars.forEach(function(el, i){
+    el.style.willChange = 'transform, opacity';
+    el.style.transitionDelay = (i % 6) * 30 + 'ms';
+  });
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var el = entry.target;
+      if (entry.isIntersecting) {
+        el.classList.add('is-inview');
+      } else {
+        el.classList.remove('is-inview'); // reset so it replays on scroll-back
+      }
+    });
+  }, { root: null, rootMargin: '0px 0px -10% 0px', threshold: [0, 0.2, 0.5, 0.8, 1] });
+
+  tiles.concat(bars).forEach(function(el){ io.observe(el); });
+
+  // Keep behavior correct if viewport crosses breakpoint
+  if (mq.addEventListener) {
+    mq.addEventListener('change', function(e){
+      if (!e.matches) {
+        tiles.concat(bars).forEach(function(el){ el.classList.remove('is-inview'); io.unobserve(el); });
+        body.classList.remove('sr-ready');
+      } else {
+        body.classList.add('sr-ready');
+        requestAnimationFrame(function(){
+          tiles.concat(bars).forEach(function(el){ io.observe(el); });
+        });
+      }
+    });
+  }
+})();
+</script>
 </body>
 </html>
-
-    
