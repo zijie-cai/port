@@ -2975,10 +2975,7 @@ html[data-theme="light"] .card .thumb {
         </div>
       </div>
 
-      <audio id="nameAudio" preload="none">
-  <source src="zijie-cai.m4a" type="audio/mpeg">
-</audio>
-
+      
       <!-- Appearance first -->
       <div class="settings-section ov-item" style="--d:.15s">
         <div class="settings-item">
@@ -5898,31 +5895,6 @@ window.addEventListener('load', () => {
     });
   }
 })();
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.querySelector(".pronounce-btn");
-  const audio = document.getElementById("nameAudio");
-
-  function toggleAudio(e) {
-    e.preventDefault();
-    if (audio.paused) {
-      audio.currentTime = 0; // restart each time
-      audio.play().then(() => {
-        btn.classList.add("is-playing");
-      }).catch(err => {
-        console.warn("Mobile playback blocked:", err);
-      });
-    } else {
-      audio.pause();
-      btn.classList.remove("is-playing");
-    }
-  }
-
-  // Attach to both click + touchstart for iOS reliability
-  btn.addEventListener("click", toggleAudio);
-  btn.addEventListener("touchstart", toggleAudio, { passive: true });
-});
 </script>
 </body>
 </html>
