@@ -887,7 +887,7 @@ html[data-theme="dark"] .enter-btn {
 
     /* ——— New Portfolio Template: Typography & Utilities ——— */
     /* ——— Wix-inspired minimal top bar + hello hero ——— */
-
+    
     .hello {
       min-height: 100vh;       /* full screen */
       max-width: 1200px;
@@ -1103,6 +1103,16 @@ html[data-theme="dark"] .enter-btn {
       text-align: center;
     }
     .hello-meta .item strong { display:block; color: var(--text-color); font-size: 1.15rem; }
+
+
+  @media (max-width: 600px) {
+      .hello {
+        padding-top: 10rem !important;
+      }
+  .hello-meta {
+    margin: -10rem auto 2.5rem !important; /* move email/contact section up */
+  }
+}
 
     @media (max-width: 900px) {
       .hello {
