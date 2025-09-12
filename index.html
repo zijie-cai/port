@@ -1089,7 +1089,7 @@ html[data-theme="dark"] .enter-btn {
       grid-template-columns: repeat(3,1fr);
       gap: 1rem;
       max-width: 1200px;
-      margin: -28rem auto 2.5rem !important;
+      margin: -30rem auto 4rem !important;
       padding: 2rem 1rem 5rem;
       border-top: 1px solid rgba(255,255,255,.08);
       padding-top: 2rem;
@@ -1104,7 +1104,15 @@ html[data-theme="dark"] .enter-btn {
     }
     .hello-meta .item strong { display:block; color: var(--text-color); font-size: 1.15rem; }
 
-
+.pronounce-btn::before,
+.pronounce-btn::after {
+  pointer-events: none !important;
+}
+.language-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none !important; /* make sure it can’t block clicks */
+}
   @media (max-width: 600px) {
       .hello {
         padding-top: 6rem !important;
