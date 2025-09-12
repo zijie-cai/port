@@ -66,17 +66,28 @@
   <script>
     // Bootstrap theme early to avoid FOUC
     (function () {
-      const storageKey = 'theme-preference';
-      const getPreferred = () => {
-        const stored = localStorage.getItem(storageKey);
-        if (stored === 'light' || stored === 'dark') return stored;
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      };
-      const theme = getPreferred();
-      document.documentElement.setAttribute('data-theme', theme);
-      // expose current for later scripts
-      window.__themePref = theme;
-    })();
+  const storageKey = 'theme-preference';
+  const label = document.querySelector(".language-overlay .theme-label");
+
+  const getPreferred = () => {
+    const stored = localStorage.getItem(storageKey);
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
+  const setTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    window.__themePref = theme;
+    localStorage.setItem(storageKey, theme);
+    if (label) label.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+  };
+
+  // init on load
+  setTheme(getPreferred());
+
+  // expose setter for toggle buttons etc.
+  window.__setTheme = setTheme;
+})();
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
