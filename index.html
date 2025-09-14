@@ -2856,8 +2856,16 @@ html[data-theme="light"] .card .thumb {
     .hello h1 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); }
     .hello .blurb { font-size: 1.1rem; }
     .hello .cta { width: 112px; height: 112px; font-size: 1.1rem; }
-    /* Increase separation between CTA row and quick contact */
-    .hello-meta { margin-top: -8rem !important; }
+    /* Make quick-contact smaller and higher */
+    .hello-meta { margin-top: -26rem !important; }
+    .hello-meta .item { font-size: .95rem; }
+    .hello-meta .item strong { font-size: 1rem; }
+    /* Scroll Down indicator: smaller + higher */
+    .container_mouse { transform: scale(.9); margin-top: -7.5rem; }
+    .container_mouse span { font-size: .9rem; }
+
+    /* Shift About text column slightly right and up without affecting layout flow */
+    .hello .avatar-wrap + div { transform: translate(24px, -20px); }
   }
   
   /* Tablet polish */
