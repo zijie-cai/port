@@ -2847,6 +2847,16 @@ html[data-theme="light"] .card .thumb {
     /* Push quick-contact lower on laptop/desktop */
     .hello-meta { margin-top: -22rem; }
   }
+
+  /* Laptop fullscreen: make About section slightly smaller */
+  @media (min-width: 1024px) and (max-width: 1536px) {
+    /* Narrow the left column and shrink key elements */
+    .hello { grid-template-columns: 300px 1fr; gap: 2.25rem; }
+    .hello .avatar { width: 300px; }
+    .hello h1 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); }
+    .hello .blurb { font-size: 1.1rem; }
+    .hello .cta { width: 112px; height: 112px; font-size: 1.1rem; }
+  }
   
   /* Tablet polish */
   @media (max-width: 1024px) {
