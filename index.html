@@ -2378,7 +2378,21 @@ html[data-theme="light"] .card .thumb {
     .skill strong { font-size:1rem; }
     .level { font-size:.75rem; font-weight:700; padding:.2rem .5rem; border-radius:999px; background: var(--gradient-accent-soft); }
     .tags { display:flex; flex-wrap:wrap; gap:.35rem; }
-    .tag { font-size:.75rem; padding:.2rem .45rem; border-radius:.35rem; background: var(--badge-bg); color: var(--badge-color); }
+    .tags.tags-compact { gap:.25rem; }
+    .tags.tags-compact .tag { font-size:.72rem; padding:.18rem .4rem; white-space:nowrap; }
+    .tag {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-size:.75rem;
+      padding:.2rem .45rem;
+      border-radius:.35rem;
+      background: var(--badge-bg);
+      color: var(--badge-color);
+      line-height:1.2;
+      min-height:1.4rem;
+    }
     .bar { height:8px; background: color-mix(in oklab, var(--accent-color) 18%, transparent); border-radius:999px; overflow:hidden; }
     /* Animate skill bar fill on reveal */
     @keyframes fillBar {
@@ -3684,54 +3698,47 @@ document.addEventListener("DOMContentLoaded", () => {
     <h2 data-i18n data-i18n-en="Featured" data-i18n-zh="精选" data-i18n-ja="注目">Featured</h2>
     <div class="cards">
 
-      <!-- AItinerary -->
+      <!-- PupCare -->
       <article class="card reveal">
         <div class="thumb">
-          <img src="/images/aitin-1.png" alt="AItinerary app screenshot"
+          <img src="/images/aitin-1.png" alt="PupCare app preview"
                data-i18n data-i18n-attrs="alt"
-               data-i18n-alt-en="AItinerary app screenshot"
-               data-i18n-alt-zh="AItinerary 应用截图"
-               data-i18n-alt-ja="AItinerary アプリのスクリーンショット"
+               data-i18n-alt-en="PupCare app preview"
+               data-i18n-alt-zh="PupCare 应用预览"
+               data-i18n-alt-ja="PupCare アプリプレビュー"
                loading="lazy" decoding="async">
         </div>
-        <h3 data-i18n data-i18n-en="AItinerary (Preview)" data-i18n-zh="AItinerary（预览）" data-i18n-ja="AItinerary（プレビュー）">
-          AItinerary (Preview)
+        <h3 data-i18n data-i18n-en="PupCare (Beta)" data-i18n-zh="PupCare（测试版）" data-i18n-ja="PupCare（ベータ）">
+          PupCare (Beta)
         </h3>
 
         <!-- Desktop description -->
         <p class="card-desc card-desc--desktop" data-i18n data-i18n-html
-           data-i18n-en='Meet <strong>Aitin</strong>, your AI travel copilot—instantly pulling real-time flights, hotels, events, and weather into personalized, day-by-day itineraries synced seamlessly with your calendar, with smart recommendations that adapt to your preferences. Travel made easy.'
-           data-i18n-zh='认识 <strong>Aitin</strong>，你的 AI 旅行副驾——聚合航班、酒店、活动与天气，自动生成日程并同步日历；支持多城市/多日、预算约束与动态重排；推荐随历史与偏好自适应，让出行更省心。'
-           data-i18n-ja='あなたのAI旅行コパイロット<strong>Aitin</strong>。フライト・ホテル・イベント・天気をリアルタイムで集約し、カレンダー連携の<strong>日別スケジュール</strong>を自動作成。嗜好に合わせて賢く提案し、旅づくりをもっと簡単にします。'>
+           data-i18n-en='Meet the fitness & wellness journal for dog owners—track walks with live route maps, log potty and diet habits, and capture photo or video memories with intuitive <strong>#hashtags</strong>. Discover <strong>dog-friendly spots</strong>, collect location-based stamps, and build a meaningful timeline of every adventure you share together.'
+           data-i18n-zh='面向狗狗主人的健康日志：实时记录散步路线、追踪如厕/饮食习惯，并用直观的 <strong>#标签</strong> 整理照片或视频。探索 <strong>狗狗友好地点</strong>、收集地理印章，让每次冒险都成为共享的珍贵时间线。'
+           data-i18n-ja='飼い主と愛犬のためのウェルネス日誌。ライブマップで散歩を追跡し、トイレや食事の習慣を記録、思い出は直感的な<strong>#ハッシュタグ</strong>で整理。<strong>ドッグフレンドリースポット</strong>を見つけ、位置スタンプを集めて二人の冒険をタイムラインに残します。'>
         </p>
 
         <!-- Mobile description -->
         <p class="card-desc card-desc--mobile" data-i18n data-i18n-html
-           data-i18n-en='Meet <strong>Aitin</strong>, your AI travel copilot—pulling real-time flights, hotels, events, and weather into personalized day-by-day itineraries synced with your calendar, with smart recommendations that adapt to your preferences. Travel made easy.'
-          data-i18n-zh='认识 <strong>Aitin</strong>，你的 AI 旅行副驾—聚合航班、酒店、活动与天气，自动生成日程并同步日历；支持多城市/多日、预算约束与动态重排；推荐随历史与偏好自适应，让出行更省心。'
-           data-i18n-ja='あなたのAI旅行コパイロット<strong>Aitin</strong>。フライト・ホテル・イベント・天気をリアルタイムで集約し、カレンダー連携の<strong>日別スケジュール</strong>を自動作成。嗜好に合わせて賢く提案し、旅づくりをもっと簡単にします。'>
+           data-i18n-en='Track walks with live maps, log potty/diet habits, and capture memories with smart <strong>#hashtags</strong>. Use <strong>Pup Explore</strong> to find <strong>dog-friendly spots</strong>, earn location stamps, and grow a shared adventure timeline.'
+          data-i18n-zh='用实时地图记录散步、追踪如厕/饮食，并以 <strong>#标签</strong> 整理回忆；借助 <strong>Pup Explore</strong> 解锁 <strong>狗狗友好地点</strong>、收集印章，串联每次冒险。'
+           data-i18n-ja='ライブマップで散歩を記録し、トイレや食事ログ、思い出を <strong>#ハッシュタグ</strong>で整理。<strong>Pup Explore</strong>で<strong>ドッグフレンドリースポット</strong>を見つけ、スタンプを集めて冒険のタイムラインに。'>
         </p>
 
         <div class="meta badges">
-          <span class="badge" data-i18n data-i18n-en="React" data-i18n-zh="React">React</span>
-          <span class="badge" data-i18n data-i18n-en="Node" data-i18n-zh="Node.js">Node</span>
-          <span class="badge" data-i18n data-i18n-en="MCP" data-i18n-zh="MCP">MCP</span>
+          <span class="badge" data-i18n data-i18n-en="Flutter" data-i18n-zh="Flutter">Flutter</span>
+          <span class="badge" data-i18n data-i18n-en="Firebase" data-i18n-zh="Firebase">Firebase</span>
+          <span class="badge" data-i18n data-i18n-en="Maps" data-i18n-zh="地图" data-i18n-ja="マップ">Maps</span>
         </div>
         <div class="card-actions">
-          <a class="btn small" href="#" target="_blank" rel="noopener"
+          <a class="btn small" href="https://mypupcare.com" target="_blank" rel="noopener"
              data-i18n data-i18n-en="Live" data-i18n-zh="演示" data-i18n-ja="デモ"
              data-i18n-attrs="aria-label"
-             aria-label="Open AItinerary live preview"
-             data-i18n-aria-label-en="Open AItinerary live preview"
-             data-i18n-aria-label-zh="打开 AItinerary 在线演示"
-             data-i18n-aria-label-ja="AItinerary のライブプレビューを開く">Live</a>
-          <a class="btn small outline" href="#" target="_blank" rel="noopener"
-             data-i18n data-i18n-en="Code" data-i18n-zh="代码" data-i18n-ja="コード"
-             data-i18n-attrs="aria-label"
-             aria-label="View AItinerary code"
-             data-i18n-aria-label-en="View AItinerary code"
-             data-i18n-aria-label-zh="查看 AItinerary 源码"
-             data-i18n-aria-label-ja="AItinerary のコードを見る">Code</a>
+             aria-label="Open PupCare live site"
+             data-i18n-aria-label-en="Open PupCare live site"
+             data-i18n-aria-label-zh="打开 PupCare 在线体验"
+             data-i18n-aria-label-ja="PupCare のライブサイトを開く">Live</a>
         </div>
       </article>
 
@@ -4050,11 +4057,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="skill reveal">
             <div class="skill-head"><strong data-i18n data-i18n-en="Machine Learning" data-i18n-zh="机器学习" data-i18n-ja="機械学習">Machine Learning</strong><span class="level" data-i18n data-i18n-en="Advanced" data-i18n-zh="高级" data-i18n-ja="上級">Advanced</span></div>
             <div class="tags">
-              <span class="tag" data-i18n data-i18n-en="PyTorch" data-i18n-zh="PyTorch">PyTorch</span>
-              <span class="tag" data-i18n data-i18n-en="TensorFlow" data-i18n-zh="TensorFlow">TensorFlow</span>
-              <span class="tag" data-i18n data-i18n-en="scikit-learn" data-i18n-zh="scikit-learn">scikit-learn</span>
-              <span class="tag" data-i18n data-i18n-en="OpenCV" data-i18n-zh="OpenCV">OpenCV</span>
-              <span class="tag" data-i18n data-i18n-en="Transformers" data-i18n-zh="Transformers" data-i18n-ja="Transformers">Transformers</span>
+              <span class="tag" data-i18n data-i18n-en="PyTorch" data-i18n-zh="PyTorch" data-i18n-ja="PyTorch">PyTorch</span>
+              <span class="tag" data-i18n data-i18n-en="TensorFlow" data-i18n-zh="TensorFlow" data-i18n-ja="TensorFlow">TensorFlow</span>
+              <span class="tag" data-i18n data-i18n-en="FlashAttention" data-i18n-zh="FlashAttention" data-i18n-ja="FlashAttention">FlashAttention</span>
+              <span class="tag" data-i18n data-i18n-en="Diffusion Models" data-i18n-zh="扩散模型" data-i18n-ja="拡散モデル">Diffusion Models</span>
+              <span class="tag" data-i18n data-i18n-en="Hugging Face" data-i18n-zh="Hugging Face" data-i18n-ja="Hugging Face">Hugging Face</span>
             </div>
             <div class="bar"><i style="--w:85%"></i></div>
           </div>
@@ -4062,23 +4069,23 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="skill reveal">
             <div class="skill-head"><strong data-i18n data-i18n-en="Systems &amp; Optimization" data-i18n-zh="系统与优化" data-i18n-ja="システムと最適化">Systems & Optimization</strong><span class="level" data-i18n data-i18n-en="Intermediate" data-i18n-zh="中级" data-i18n-ja="中級">Intermediate</span></div>
             <div class="tags">
-              <span class="tag" data-i18n data-i18n-en="CUDA" data-i18n-zh="CUDA">CUDA</span>
-              <span class="tag" data-i18n data-i18n-en="Triton" data-i18n-zh="Triton">Triton</span>
-              <span class="tag" data-i18n data-i18n-en="TensorRT" data-i18n-zh="TensorRT">TensorRT</span>
-              <span class="tag" data-i18n data-i18n-en="C++" data-i18n-zh="C++">C++</span>
-              <span class="tag" data-i18n data-i18n-en="Quantization" data-i18n-zh="Quantization" data-i18n-ja="量子化">Quantization</span>
-              <span class="tag" data-i18n data-i18n-en="Profiling" data-i18n-zh="Profiling" data-i18n-ja="プロファイリング">Profiling</span>
+              <span class="tag" data-i18n data-i18n-en="CUDA" data-i18n-zh="CUDA" data-i18n-ja="CUDA">CUDA</span>
+              <span class="tag" data-i18n data-i18n-en="Triton" data-i18n-zh="Triton" data-i18n-ja="Triton">Triton</span>
+              <span class="tag" data-i18n data-i18n-en="TensorRT-LLM" data-i18n-zh="TensorRT-LLM" data-i18n-ja="TensorRT-LLM">TensorRT-LLM</span>
+              <span class="tag" data-i18n data-i18n-en="Quantization-Aware Training" data-i18n-zh="量化感知训练" data-i18n-ja="量子化対応学習">Quantization-Aware Training</span>
+              <span class="tag" data-i18n data-i18n-en="Profiling" data-i18n-zh="性能分析" data-i18n-ja="プロファイリング">Profiling</span>
             </div>
             <div class="bar"><i style="--w:72%"></i></div>
           </div>
 
           <div class="skill reveal">
-            <div class="skill-head"><strong data-i18n data-i18n-en="LLMs &amp; RAG" data-i18n-zh="大语言模型与 RAG" data-i18n-ja="LLM と RAG">LLMs & RAG</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
+            <div class="skill-head"><strong data-i18n data-i18n-en="LLMs &amp; RAG" data-i18n-zh="大模型与RAG" data-i18n-ja="LLM と RAG">LLMs & RAG</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
             <div class="tags">
-              <span class="tag" data-i18n data-i18n-en="Prompt Engineering" data-i18n-zh="Prompt Engineering" data-i18n-ja="プロンプトエンジニアリング">Prompt Engineering</span>
-              <span class="tag" data-i18n data-i18n-en="LangChain" data-i18n-zh="LangChain">LangChain</span>
-              <span class="tag" data-i18n data-i18n-en="Fine-tuning" data-i18n-zh="Fine-tuning" data-i18n-ja="ファインチューニング">Fine-tuning</span>
-              <span class="tag" data-i18n data-i18n-en="Evaluation" data-i18n-zh="Evaluation" data-i18n-ja="評価">Evaluation</span>
+              <span class="tag" data-i18n data-i18n-en="Prompt Engineering" data-i18n-zh="提示工程" data-i18n-ja="プロンプトエンジニアリング">Prompt Engineering</span>
+              <span class="tag" data-i18n data-i18n-en="LangChain" data-i18n-zh="LangChain" data-i18n-ja="LangChain">LangChain</span>
+              <span class="tag" data-i18n data-i18n-en="vLLM" data-i18n-zh="vLLM" data-i18n-ja="vLLM">vLLM</span>
+              <span class="tag" data-i18n data-i18n-en="LoRA Fine-tuning" data-i18n-zh="LoRA微调" data-i18n-ja="LoRA ファインチューニング">LoRA Fine-tuning</span>
+              <span class="tag" data-i18n data-i18n-en="Guardrails" data-i18n-zh="护栏" data-i18n-ja="Guardrails">Guardrails</span>
             </div>
             <div class="bar"><i style="--w:76%"></i></div>
           </div>
@@ -4086,38 +4093,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
           <div class="skill reveal">
-            <div class="skill-head"><strong data-i18n data-i18n-en="Web Development" data-i18n-zh="Web 开发" data-i18n-ja="Web 開発">Web Development</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
+            <div class="skill-head"><strong data-i18n data-i18n-en="AI Product Engineering" data-i18n-zh="AI 产品工程" data-i18n-ja="AIプロダクト開発">AI Product Engineering</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
             <div class="tags">
-              <span class="tag" data-i18n data-i18n-en="HTML" data-i18n-zh="HTML">HTML</span>
-              <span class="tag" data-i18n data-i18n-en="CSS" data-i18n-zh="CSS">CSS</span>
-              <span class="tag" data-i18n data-i18n-en="JavaScript" data-i18n-zh="JavaScript">JavaScript</span>
-              <span class="tag" data-i18n data-i18n-en="TypeScript" data-i18n-zh="TypeScript">TypeScript</span>
-              <span class="tag" data-i18n data-i18n-en="React" data-i18n-zh="React">React</span>
-              <span class="tag" data-i18n data-i18n-en="Next.js" data-i18n-zh="Next.js">Next.js</span>
-              <span class="tag" data-i18n data-i18n-en="Node/Express" data-i18n-zh="Node/Express">Node/Express</span>
+              <span class="tag" data-i18n data-i18n-en="HTML / CSS / JS" data-i18n-zh="HTML / CSS / JS" data-i18n-ja="HTML／CSS／JS">HTML / CSS / JS</span>
+              <span class="tag" data-i18n data-i18n-en="React" data-i18n-zh="React" data-i18n-ja="React">React</span>
+              <span class="tag" data-i18n data-i18n-en="Next.js" data-i18n-zh="Next.js" data-i18n-ja="Next.js">Next.js</span>
+              <span class="tag" data-i18n data-i18n-en="FastAPI" data-i18n-zh="FastAPI" data-i18n-ja="FastAPI">FastAPI</span>
+              <span class="tag" data-i18n data-i18n-en="TypeScript" data-i18n-zh="TypeScript" data-i18n-ja="TypeScript">TypeScript</span>
+              <span class="tag" data-i18n data-i18n-en="Git" data-i18n-zh="Git" data-i18n-ja="Git">Git</span>
             </div>
             <div class="bar"><i style="--w:75%"></i></div>
           </div>
 
           <div class="skill reveal">
-            <div class="skill-head"><strong data-i18n data-i18n-en="Data &amp; MLOps" data-i18n-zh="数据与 MLOps" data-i18n-ja="データと MLOps">Data & MLOps</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
+            <div class="skill-head"><strong data-i18n data-i18n-en="MLOps &amp; Observability" data-i18n-zh="MLOps 与可观测性" data-i18n-ja="MLOps・監視">MLOps &amp; Observability</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
             <div class="tags">
-              <span class="tag" data-i18n data-i18n-en="SQL" data-i18n-zh="SQL">SQL</span>
-              <span class="tag" data-i18n data-i18n-en="Docker" data-i18n-zh="Docker">Docker</span>
-              <span class="tag" data-i18n data-i18n-en="CI/CD" data-i18n-zh="CI/CD">CI/CD</span>
-              <span class="tag" data-i18n data-i18n-en="PyTest" data-i18n-zh="PyTest">PyTest</span>
-             
+              <span class="tag" data-i18n data-i18n-en="Docker" data-i18n-zh="Docker" data-i18n-ja="Docker">Docker</span>
+              <span class="tag" data-i18n data-i18n-en="Kubernetes" data-i18n-zh="Kubernetes" data-i18n-ja="Kubernetes">Kubernetes</span>
+              <span class="tag" data-i18n data-i18n-en="ETL Pipelines" data-i18n-zh="ETL 流水线" data-i18n-ja="ETL パイプライン">ETL Pipelines</span>
+              <span class="tag" data-i18n data-i18n-en="n8n" data-i18n-zh="n8n" data-i18n-ja="n8n">n8n</span>
+              <span class="tag" data-i18n data-i18n-en="CI/CD" data-i18n-zh="CI/CD" data-i18n-ja="CI/CD">CI/CD</span>
+              <span class="tag" data-i18n data-i18n-en="GitHub Actions" data-i18n-zh="GitHub Actions" data-i18n-ja="GitHub Actions">GitHub Actions</span>
             </div>
             <div class="bar"><i style="--w:74%"></i></div>
           </div>
 
           <div class="skill reveal">
-            <div class="skill-head"><strong data-i18n data-i18n-en="Cloud" data-i18n-zh="云计算" data-i18n-ja="クラウド">Cloud</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
+            <div class="skill-head"><strong data-i18n data-i18n-en="Cloud &amp; Infra" data-i18n-zh="云与基础设施" data-i18n-ja="クラウドとインフラ">Cloud &amp; Infra</strong><span class="level" data-i18n data-i18n-en="Proficient" data-i18n-zh="熟练" data-i18n-ja="熟練">Proficient</span></div>
             <div class="tags">
-              <span class="tag" data-i18n data-i18n-en="GCP" data-i18n-zh="GCP">GCP</span>
-              <span class="tag" data-i18n data-i18n-en="AWS" data-i18n-zh="AWS">AWS</span>
-              <span class="tag" data-i18n data-i18n-en="Cloud Run" data-i18n-zh="Cloud Run">Cloud Run</span>
-              <span class="tag" data-i18n data-i18n-en="Lambda" data-i18n-zh="Lambda">Lambda</span>
+              <span class="tag" data-i18n data-i18n-en="AWS" data-i18n-zh="AWS" data-i18n-ja="AWS">AWS</span>
+              <span class="tag" data-i18n data-i18n-en="GCP" data-i18n-zh="GCP" data-i18n-ja="GCP">GCP</span>
+              <span class="tag" data-i18n data-i18n-en="Cloud Run / Lambda" data-i18n-zh="Cloud Run / Lambda" data-i18n-ja="Cloud Run／Lambda">Cloud Run / Lambda</span>
+              <span class="tag" data-i18n data-i18n-en="BigQuery" data-i18n-zh="BigQuery" data-i18n-ja="BigQuery">BigQuery</span>
+              <span class="tag" data-i18n data-i18n-en="VPC / IAM" data-i18n-zh="VPC / IAM" data-i18n-ja="VPC／IAM">VPC / IAM</span>
             </div>
             <div class="bar"><i style="--w:70%"></i></div>
           </div>
